@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+protocol ToDoListInteractorProtocol: AnyObject {
+    
+}
+
+class ToDoListInteractor {
+    weak var presenter: ToDoListPresenterProtocol?
+}
+
+extension ToDoListInteractor: ToDoListInteractorProtocol {
+    
+}
+

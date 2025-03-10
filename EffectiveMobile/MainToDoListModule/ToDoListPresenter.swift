@@ -6,3 +6,19 @@
 //
 
 import Foundation
+
+protocol ToDoListPresenterProtocol: AnyObject {
+    func updateSearchResult(with: String)
+}
+
+class ToDoListPresenter {
+    weak var view: ToDoListViewProtocol?
+    var interactor: ToDoListInteractorProtocol?
+    var router: ToDoListRouterProtocol?
+}
+
+extension ToDoListPresenter: ToDoListPresenterProtocol {
+    func updateSearchResult(with: String) {
+        // TODO: add filtering logic
+    }
+}

@@ -9,23 +9,29 @@
 /* Begin PBXBuildFile section */
 		88C182F32D7EF63F0081D1FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F22D7EF63F0081D1FE /* AppDelegate.swift */; };
 		88C182F52D7EF63F0081D1FE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F42D7EF63F0081D1FE /* SceneDelegate.swift */; };
-		88C182F72D7EF63F0081D1FE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F62D7EF63F0081D1FE /* ViewController.swift */; };
-		88C182FA2D7EF63F0081D1FE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 88C182F92D7EF63F0081D1FE /* Base */; };
+		88C182F72D7EF63F0081D1FE /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F62D7EF63F0081D1FE /* ToDoListViewController.swift */; };
 		88C182FD2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 88C182FB2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld */; };
 		88C182FF2D7EF6400081D1FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88C182FE2D7EF6400081D1FE /* Assets.xcassets */; };
 		88C183022D7EF6400081D1FE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 88C183012D7EF6400081D1FE /* Base */; };
+		88C1830E2D7EFDCC0081D1FE /* ToDoListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1830D2D7EFDCC0081D1FE /* ToDoListPresenter.swift */; };
+		88C183102D7EFDD60081D1FE /* ToDoListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1830F2D7EFDD60081D1FE /* ToDoListInteractor.swift */; };
+		88C183122D7EFDE10081D1FE /* ToDoListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C183112D7EFDE10081D1FE /* ToDoListRouter.swift */; };
+		88C183142D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C183132D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		88C182EF2D7EF63F0081D1FE /* EffectiveMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EffectiveMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88C182F22D7EF63F0081D1FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88C182F42D7EF63F0081D1FE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		88C182F62D7EF63F0081D1FE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		88C182F92D7EF63F0081D1FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		88C182F62D7EF63F0081D1FE /* ToDoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListViewController.swift; sourceTree = "<group>"; };
 		88C182FC2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EffectiveMobile.xcdatamodel; sourceTree = "<group>"; };
 		88C182FE2D7EF6400081D1FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88C183012D7EF6400081D1FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88C183032D7EF6400081D1FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		88C1830D2D7EFDCC0081D1FE /* ToDoListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListPresenter.swift; sourceTree = "<group>"; };
+		88C1830F2D7EFDD60081D1FE /* ToDoListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListInteractor.swift; sourceTree = "<group>"; };
+		88C183112D7EFDE10081D1FE /* ToDoListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListRouter.swift; sourceTree = "<group>"; };
+		88C183132D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListModuleConfigurator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +64,51 @@
 		88C182F12D7EF63F0081D1FE /* EffectiveMobile */ = {
 			isa = PBXGroup;
 			children = (
+				88C183092D7EF6C00081D1FE /* Application */,
+				88C1830C2D7EF7040081D1FE /* MainToDoListModule */,
+				88C1830A2D7EF6CA0081D1FE /* Resources */,
+				88C1830B2D7EF6FA0081D1FE /* SupportingFiles */,
+			);
+			path = EffectiveMobile;
+			sourceTree = "<group>";
+		};
+		88C183092D7EF6C00081D1FE /* Application */ = {
+			isa = PBXGroup;
+			children = (
 				88C182F22D7EF63F0081D1FE /* AppDelegate.swift */,
 				88C182F42D7EF63F0081D1FE /* SceneDelegate.swift */,
-				88C182F62D7EF63F0081D1FE /* ViewController.swift */,
-				88C182F82D7EF63F0081D1FE /* Main.storyboard */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		88C1830A2D7EF6CA0081D1FE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
 				88C182FE2D7EF6400081D1FE /* Assets.xcassets */,
 				88C183002D7EF6400081D1FE /* LaunchScreen.storyboard */,
 				88C183032D7EF6400081D1FE /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		88C1830B2D7EF6FA0081D1FE /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
 				88C182FB2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld */,
 			);
-			path = EffectiveMobile;
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		88C1830C2D7EF7040081D1FE /* MainToDoListModule */ = {
+			isa = PBXGroup;
+			children = (
+				88C182F62D7EF63F0081D1FE /* ToDoListViewController.swift */,
+				88C1830D2D7EFDCC0081D1FE /* ToDoListPresenter.swift */,
+				88C1830F2D7EFDD60081D1FE /* ToDoListInteractor.swift */,
+				88C183112D7EFDE10081D1FE /* ToDoListRouter.swift */,
+				88C183132D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift */,
+			);
+			path = MainToDoListModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,7 +171,6 @@
 			files = (
 				88C182FF2D7EF6400081D1FE /* Assets.xcassets in Resources */,
 				88C183022D7EF6400081D1FE /* Base in Resources */,
-				88C182FA2D7EF63F0081D1FE /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,9 +181,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88C182F72D7EF63F0081D1FE /* ViewController.swift in Sources */,
+				88C182F72D7EF63F0081D1FE /* ToDoListViewController.swift in Sources */,
 				88C182FD2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld in Sources */,
 				88C182F32D7EF63F0081D1FE /* AppDelegate.swift in Sources */,
+				88C1830E2D7EFDCC0081D1FE /* ToDoListPresenter.swift in Sources */,
+				88C183142D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift in Sources */,
+				88C183122D7EFDE10081D1FE /* ToDoListRouter.swift in Sources */,
+				88C183102D7EFDD60081D1FE /* ToDoListInteractor.swift in Sources */,
 				88C182F52D7EF63F0081D1FE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,14 +195,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		88C182F82D7EF63F0081D1FE /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				88C182F92D7EF63F0081D1FE /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		88C183002D7EF6400081D1FE /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -298,12 +334,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LZP4UC5RAY;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = EffectiveMobile/Info.plist;
+				INFOPLIST_FILE = EffectiveMobile/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -311,9 +346,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = IM.EffectiveMobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -326,12 +365,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LZP4UC5RAY;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = EffectiveMobile/Info.plist;
+				INFOPLIST_FILE = EffectiveMobile/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -339,9 +377,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = IM.EffectiveMobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+protocol ToDoListRouterProtocol: AnyObject {
+    
+}
+
+class ToDoListRouter {
+    weak var view: ToDoListViewProtocol?
+}
+
+extension ToDoListRouter: ToDoListRouterProtocol {
+    
+}
