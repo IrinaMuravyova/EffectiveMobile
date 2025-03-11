@@ -16,6 +16,7 @@ final class ToDoListViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     private let searchControllerBackgroundColor = UIColor(hex: "#272729")
     private let footerColor = UIColor(hex: "#272729")
+    private let searchCancelButtonColor = UIColor(hex: "#272729")
     private let footerButtonColor = UIColor(hex: "#FED702")
     private var tableView: UITableView!
     private var toolBar = UIToolbar()
@@ -66,6 +67,11 @@ extension ToDoListViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search"
        
+        searchController.searchBar.delegate = self
+        
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+            .tintColor = searchCancelButtonColor
+        
         let textField = searchController.searchBar.searchTextField
         textField.backgroundColor = searchControllerBackgroundColor
         
@@ -138,11 +144,16 @@ extension ToDoListViewController: ToDoListViewProtocol {
     }
 }
 
-// MARK: - UISearchResultsUpdating
-extension ToDoListViewController: UISearchResultsUpdating {
+
+extension ToDoListViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    // MARK: - UISearchResultsUpdating
     func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text ?? ""
         presenter?.updateSearchResult(with: searchText)
+    }
+    // MARK: - UISearchBarDelegate
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        presenter?.clearSearchResult()
     }
 }
 

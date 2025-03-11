@@ -15,6 +15,7 @@ protocol ToDoListPresenterProtocol: AnyObject {
     func configure(cell: ToDoTableViewCell, at index: Int)
     func getTodosCount() -> Int 
     func getTodosCountString() -> String
+    func clearSearchResult()
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
@@ -42,13 +43,9 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
                 todos = todosBeforeFiltering
         } else {
             let filteredTodos = todos.filter { todo in
-                print("Filtering started")
                 let titleContains = todo.title.lowercased().contains(query.lowercased())
-                print("titleContains:  ", titleContains)
                 let descriptionContains = todo.description.lowercased().contains(query.lowercased())
-                print("descriptionContains:  ", descriptionContains)
                 let dateContains = todo.date.contains(query.lowercased())
-                print("dateContains:  ", dateContains)
                 
                 return titleContains || descriptionContains || dateContains
             }
@@ -85,6 +82,11 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
     
     func getTodosCountString() -> String {
         pluralizeTask(count: todosCount)
+    }
+    
+    func clearSearchResult() {
+        todos = todosBeforeFiltering
+        didFilteredToDoList(todos)
     }
 }
 
