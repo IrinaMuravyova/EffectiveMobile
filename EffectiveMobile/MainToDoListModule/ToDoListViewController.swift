@@ -108,6 +108,8 @@ extension ToDoListViewController {
         footerLabel.text = presenter?.pluralizeTask(count: todos.count)
         footerLabel.font = UIFont.systemFont(ofSize: 11)
         footerLabel.sizeToFit()
+        footerLabel.translatesAutoresizingMaskIntoConstraints = false
+
         footerLabel.setLetterSpacing(0.06)
         let labelItem = UIBarButtonItem(customView: footerLabel)
         
@@ -119,9 +121,10 @@ extension ToDoListViewController {
         )
         addButton.tintColor = footerButtonColor
         
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let flexibleSpaceFirst = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let flexibleSpaceSecond = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
-        toolBar.setItems([flexibleSpace, labelItem, flexibleSpace, addButton], animated: false)
+        toolBar.setItems([flexibleSpaceFirst, labelItem, flexibleSpaceSecond, addButton], animated: false)
     }
 }
 
