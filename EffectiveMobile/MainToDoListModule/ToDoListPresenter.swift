@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ToDoListPresenterProtocol: AnyObject {
-    func updateSearchResult(with: String)
+    func updateSearchResult(with query: String)
     func markToDoIsCompleted()
     func createToDo()
     func getData()
@@ -19,10 +19,12 @@ protocol ToDoListPresenterProtocol: AnyObject {
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
     func didLoadToDoList(_ todos: [ToDo])
+    func setFilteredTodos()
 }
 
 class ToDoListPresenter {
     private var todos: [ToDo] = []
+    private var todosBeforeFiltering: [ToDo] = []
     var todosCount: Int {
             return todos.count
         }
@@ -33,8 +35,25 @@ class ToDoListPresenter {
 }
 
 extension ToDoListPresenter: ToDoListPresenterProtocol {
-    func updateSearchResult(with: String) {
-        // TODO: add filtering logic
+    func updateSearchResult(with query: String) {
+        todos = todosBeforeFiltering
+        
+        if query.isEmpty {
+                todos = todosBeforeFiltering
+        } else {
+            let filteredTodos = todos.filter { todo in
+                print("Filtering started")
+                let titleContains = todo.title.lowercased().contains(query.lowercased())
+                print("titleContains:  ", titleContains)
+                let descriptionContains = todo.description.lowercased().contains(query.lowercased())
+                print("descriptionContains:  ", descriptionContains)
+                let dateContains = todo.date.contains(query.lowercased())
+                print("dateContains:  ", dateContains)
+                
+                return titleContains || descriptionContains || dateContains
+            }
+            didFilteredToDoList(filteredTodos)
+        }
     }
     
     func markToDoIsCompleted() {
@@ -72,8 +91,11 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
 extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
     func didLoadToDoList(_ todos: [ToDo]) {
         self.todos = todos
-        view?.reloadTableView()
-        view?.updateFooter()
+        viewReload()
+    }
+    
+    func setFilteredTodos() {
+        todosBeforeFiltering = self.todos
     }
 }
 
@@ -93,5 +115,16 @@ extension ToDoListPresenter {
         }
 
         return "\(count) \(word)"
+    }
+    
+    private func didFilteredToDoList(_ filteredTodos: [ToDo]) {
+        todosBeforeFiltering = self.todos
+        self.todos = filteredTodos
+        viewReload()
+    }
+    
+    private func viewReload() {
+        view?.reloadTableView()
+        view?.updateFooter()
     }
 }

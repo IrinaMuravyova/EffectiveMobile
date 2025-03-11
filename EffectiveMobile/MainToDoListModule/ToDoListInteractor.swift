@@ -24,6 +24,7 @@ extension ToDoListInteractor: ToDoListInteractorProtocol {
                     switch result {
                     case .success(let todos):
                         self.presenter?.didLoadToDoList(todos)
+                        self.presenter?.setFilteredTodos()
                     case .failure(let error):
                         print(error)
                     }
