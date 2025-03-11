@@ -11,8 +11,10 @@ protocol ToDoListPresenterProtocol: AnyObject {
     func updateSearchResult(with: String)
     func markToDoIsCompleted()
     func createToDo()
-    func pluralizeTask(count: Int) -> String 
     func getData()
+    func configure(cell: ToDoTableViewCell, at index: Int)
+    func getTodosCount() -> Int 
+    func getTodosCountString() -> String
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
@@ -20,11 +22,14 @@ protocol ToDoListInteractorOutputProtocol: AnyObject {
 }
 
 class ToDoListPresenter {
+    private var todos: [ToDo] = []
+    var todosCount: Int {
+            return todos.count
+        }
+    
     weak var view: ToDoListViewProtocol?
     var interactor: ToDoListInteractorProtocol?
     var router: ToDoListRouterProtocol?
-    
-    var todos: [ToDo] = []
 }
 
 extension ToDoListPresenter: ToDoListPresenterProtocol {
@@ -39,8 +44,42 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
     func createToDo() {
         // TODO: add create todo logic
     }
+
+    func getData() {
+        interactor?.getData()
+    }
     
-    func pluralizeTask(count: Int) -> String {
+    func configure(cell: ToDoTableViewCell, at index: Int) {
+        let todo = todos[index]
+        cell.configure(with: todo)
+        
+        if todo.isCompleted {
+            cell.isCompletedConfigure(with: todo)
+        } else {
+            cell.isNotCompletedConfigure(with: todo)
+        }
+    }
+    
+    func getTodosCount() -> Int {
+        todosCount
+    }
+    
+    func getTodosCountString() -> String {
+        pluralizeTask(count: todosCount)
+    }
+}
+
+extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
+    func didLoadToDoList(_ todos: [ToDo]) {
+        self.todos = todos
+        view?.reloadTableView()
+        view?.updateFooter()
+    }
+}
+
+// MARK: - Private methods
+extension ToDoListPresenter {
+    private func pluralizeTask(count: Int) -> String {
         let remainder10 = count % 10
         let remainder100 = count % 100
 
@@ -54,18 +93,5 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         }
 
         return "\(count) \(word)"
-    }
-    
-    func getData() {
-        interactor?.getData()
-    }
-}
-
-extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
-    func didLoadToDoList(_ todos: [ToDo]) {
-        self.todos = todos
-        view?.display(todos)
-        let todosCountString = pluralizeTask(count: todos.count)
-        view?.display(todosCountString)
     }
 }

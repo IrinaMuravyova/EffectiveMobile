@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol ToDoTableViewCellProtocol: AnyObject {
+    func configure(with todo: ToDo)
+    func isCompletedConfigure(with todo: ToDo)
+    func isNotCompletedConfigure(with todo: ToDo)
+}
+
 class ToDoTableViewCell: UITableViewCell {
     private let isCompletedIconColor = UIColor(hex: "#FED702")
     private let isNotCompletedIconColor = UIColor(hex: "#4D555E")
@@ -48,12 +54,11 @@ class ToDoTableViewCell: UITableViewCell {
     }
 }
 
-// MARK: - Public methods
-extension ToDoTableViewCell {
+extension ToDoTableViewCell: ToDoTableViewCellProtocol {
     func configure(with todo: ToDo) {
         descriptionTextView.text = todo.description
         if let date = Date.fromString(todo.date) {
-            let formattedDate = date.formattedString()        
+            let formattedDate = date.formattedString()
             dateTextView.text = formattedDate
         }
     }

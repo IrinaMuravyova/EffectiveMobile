@@ -8,8 +8,8 @@
 import UIKit
 
 protocol ToDoListViewProtocol: AnyObject {
-    func display(_ todos: [ToDo])
-    func display(_ todosCountString: String)
+    func updateFooter()
+    func reloadTableView()
 }
 
 final class ToDoListViewController: UIViewController {
@@ -21,7 +21,6 @@ final class ToDoListViewController: UIViewController {
     private var toolBar = UIToolbar()
     private let footerLabel = UILabel()
     
-    var todos: [ToDo] = []
     var presenter: ToDoListPresenterProtocol?
     
     override func viewDidLoad() {
@@ -105,7 +104,7 @@ extension ToDoListViewController {
             toolBar.heightAnchor.constraint(equalToConstant: 49)
         ])
         
-        footerLabel.text = presenter?.pluralizeTask(count: todos.count)
+        footerLabel.text = presenter?.getTodosCountString()
         footerLabel.font = UIFont.systemFont(ofSize: 11)
         footerLabel.sizeToFit()
         footerLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -130,13 +129,12 @@ extension ToDoListViewController {
 
 // MARK: - ToDoListViewProtocol
 extension ToDoListViewController: ToDoListViewProtocol {
-    func display(_ todos: [ToDo]) {
-        self.todos = todos
+    func reloadTableView() {
         tableView.reloadData()
     }
     
-    func display(_ todosCountString: String) {
-        footerLabel.text = todosCountString
+    func updateFooter() {
+        footerLabel.text = presenter?.getTodosCountString()
     }
 }
 
@@ -151,20 +149,13 @@ extension ToDoListViewController: UISearchResultsUpdating {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todos.count
+        return presenter?.getTodosCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? ToDoTableViewCell else { return UITableViewCell() }
-        
-        let todo = todos[indexPath.row]
-        cell.configure(with: todo)
-        
-        //debugging code
-        if todo.isCompleted { cell.isCompletedConfigure(with: todo)} else {
-            cell.isNotCompletedConfigure(with: todo)}
-        
         cell.presenter = presenter
+        presenter?.configure(cell: cell, at: indexPath.row)    
         return cell
     }
 }
