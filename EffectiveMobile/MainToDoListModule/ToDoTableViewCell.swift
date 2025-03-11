@@ -52,7 +52,10 @@ class ToDoTableViewCell: UITableViewCell {
 extension ToDoTableViewCell {
     func configure(with todo: ToDo) {
         descriptionTextView.text = todo.description
-        dateTextView.text = todo.date
+        if let date = Date.fromString(todo.date) {
+            let formattedDate = date.formattedString()        
+            dateTextView.text = formattedDate
+        }
     }
     
     func isNotCompletedConfigure(with todo: ToDo) {
@@ -105,7 +108,7 @@ extension ToDoTableViewCell {
         
         titleTextView.isEditable = false
         titleTextView.isScrollEnabled = false
-        setLetterSpacing(-0.43, for: titleTextView)
+        titleTextView.setLetterSpacing(-0.43)
         
         titleTextView.textContainerInset = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
         contentView.addSubview(titleTextView)
@@ -136,17 +139,6 @@ extension ToDoTableViewCell {
         
         dateTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         contentView.addSubview(dateTextView)
-    }
-    
-    private func setLetterSpacing(_ letterSpacing: CGFloat, for element: UITextView) {
-        guard let text = element.text else { return }
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .kern: letterSpacing
-        ]
-        
-        let attributedText = NSAttributedString(string: text, attributes: attributes)
-        element.attributedText = attributedText
     }
     
     private func setupLayout() {

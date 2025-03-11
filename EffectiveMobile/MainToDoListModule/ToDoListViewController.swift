@@ -8,21 +8,30 @@
 import UIKit
 
 protocol ToDoListViewProtocol: AnyObject {
-    
+    func display(_ todos: [ToDo])
 }
 
 final class ToDoListViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
-    private let searchControllerBackgroundColor = "#272729"
+    private let searchControllerBackgroundColor = UIColor(hex: "#272729")
+    private let footerColor = UIColor(hex: "#272729")
+    private let footerButtonColor = UIColor(hex: "#FED702")
     private var tableView: UITableView!
+    private var toolBar = UIToolbar()
+    private let footerLabel = UILabel()
     
-    let todos = ToDo.getTodos()
+    var todos: [ToDo] = []
     var presenter: ToDoListPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        presenter?.getData()
     }
+    
+    @objc private func addTapped() {
+        presenter?.createToDo()
+   }
 }
 
 // MARK: - Private methods
@@ -31,6 +40,7 @@ extension ToDoListViewController {
         setupTitle()
         setupSearchController()
         setupTableView()
+        setupToolBar()
     }
     
     private func setupTitle() {
@@ -57,7 +67,7 @@ extension ToDoListViewController {
         searchController.searchBar.placeholder = "Search"
        
         let textField = searchController.searchBar.searchTextField
-        textField.backgroundColor = UIColor(hex: searchControllerBackgroundColor)
+        textField.backgroundColor = searchControllerBackgroundColor
         
         view.addSubview(searchController.searchBar)
         searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -81,11 +91,50 @@ extension ToDoListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    private func setupToolBar() {
+        toolBar.translatesAutoresizingMaskIntoConstraints = false
+        toolBar.backgroundColor = footerColor
+        view.addSubview(toolBar)
+        
+        NSLayoutConstraint.activate([
+            toolBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toolBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toolBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            toolBar.heightAnchor.constraint(equalToConstant: 49)
+        ])
+        
+        footerLabel.text = presenter?.pluralizeTask(count: todos.count)
+        footerLabel.font = UIFont.systemFont(ofSize: 11)
+        footerLabel.sizeToFit()
+        footerLabel.setLetterSpacing(0.06)
+        let labelItem = UIBarButtonItem(customView: footerLabel)
+        
+        let addButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.pencil"),
+            style: .plain,
+            target: self,
+            action: #selector(addTapped)
+        )
+        addButton.tintColor = footerButtonColor
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+        toolBar.setItems([flexibleSpace, labelItem, flexibleSpace, addButton], animated: false)
+    }
 }
 
 // MARK: - ToDoListViewProtocol
 extension ToDoListViewController: ToDoListViewProtocol {
+    func display(_ todosCountString: String) {
+        footerLabel.text = todosCountString
+    }
     
+    func display(_ todos: [ToDo]) {
+        print("displayTodos todos = ", todos[0])
+        self.todos = todos
+        tableView.reloadData()
+    }
 }
 
 // MARK: - UISearchResultsUpdating
@@ -107,6 +156,7 @@ extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
         
         let todo = todos[indexPath.row]
         cell.configure(with: todo)
+        
         //debugging code
         if todo.isCompleted { cell.isCompletedConfigure(with: todo)} else {
             cell.isNotCompletedConfigure(with: todo)}
