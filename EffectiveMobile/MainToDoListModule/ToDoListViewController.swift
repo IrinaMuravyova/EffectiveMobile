@@ -9,6 +9,7 @@ import UIKit
 
 protocol ToDoListViewProtocol: AnyObject {
     func display(_ todos: [ToDo])
+    func display(_ todosCountString: String)
 }
 
 final class ToDoListViewController: UIViewController {
@@ -126,14 +127,13 @@ extension ToDoListViewController {
 
 // MARK: - ToDoListViewProtocol
 extension ToDoListViewController: ToDoListViewProtocol {
-    func display(_ todosCountString: String) {
-        footerLabel.text = todosCountString
-    }
-    
     func display(_ todos: [ToDo]) {
-        print("displayTodos todos = ", todos[0])
         self.todos = todos
         tableView.reloadData()
+    }
+    
+    func display(_ todosCountString: String) {
+        footerLabel.text = todosCountString
     }
 }
 
