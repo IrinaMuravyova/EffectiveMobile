@@ -14,7 +14,9 @@ protocol ToDoListViewProtocol: AnyObject {
 final class ToDoListViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     private let searchControllerBackgroundColor = "#272729"
+    private var tableView: UITableView!
     
+    let todos = ToDo.getTodos()
     var presenter: ToDoListPresenterProtocol?
     
     override func viewDidLoad() {
@@ -28,6 +30,7 @@ extension ToDoListViewController {
     private func setupUI() {
         setupTitle()
         setupSearchController()
+        setupTableView()
     }
     
     private func setupTitle() {
@@ -56,7 +59,27 @@ extension ToDoListViewController {
         let textField = searchController.searchBar.searchTextField
         textField.backgroundColor = UIColor(hex: searchControllerBackgroundColor)
         
+        view.addSubview(searchController.searchBar)
+        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
+    }
     
+    private func setupTableView() {
+        tableView = UITableView(frame: .zero, style: .plain)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: "ToDoCell")
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }
 
@@ -65,27 +88,30 @@ extension ToDoListViewController: ToDoListViewProtocol {
     
 }
 
-// MARK: - UIColor
-extension UIColor {
-    convenience init(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
-
-        var rgb: UInt64 = 0
-        Scanner(string: hexSanitized).scanHexInt64(&rgb)
-
-        let red = CGFloat((rgb >> 16) & 0xFF) / 255.0
-        let green = CGFloat((rgb >> 8) & 0xFF) / 255.0
-        let blue = CGFloat(rgb & 0xFF) / 255.0
-
-        self.init(red: red, green: green, blue: blue, alpha: 1.0)
-    }
-}
-
 // MARK: - UISearchResultsUpdating
 extension ToDoListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text ?? ""
         presenter?.updateSearchResult(with: searchText)
+    }
+}
+
+// MARK: - UITableViewDataSource, UITableViewDelegate
+extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return todos.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? ToDoTableViewCell else { return UITableViewCell() }
+        
+        let todo = todos[indexPath.row]
+        cell.configure(with: todo)
+        //debugging code
+        if todo.isCompleted { cell.isCompletedConfigure(with: todo)} else {
+            cell.isNotCompletedConfigure(with: todo)}
+        
+        cell.presenter = presenter
+        return cell
     }
 }

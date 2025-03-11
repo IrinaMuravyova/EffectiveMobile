@@ -9,6 +9,7 @@ import Foundation
 
 protocol ToDoListPresenterProtocol: AnyObject {
     func updateSearchResult(with: String)
+    func markToDoIsCompleted()
 }
 
 class ToDoListPresenter {
@@ -20,5 +21,9 @@ class ToDoListPresenter {
 extension ToDoListPresenter: ToDoListPresenterProtocol {
     func updateSearchResult(with: String) {
         // TODO: add filtering logic
+    }
+    
+    func markToDoIsCompleted() {
+        // TODO: add todo's mark logic
     }
 }
