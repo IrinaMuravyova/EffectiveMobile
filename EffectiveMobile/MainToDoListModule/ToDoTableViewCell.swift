@@ -13,12 +13,17 @@ protocol ToDoTableViewCellProtocol: AnyObject {
     func isNotCompletedConfigure(with todo: ToDo)
 }
 
+protocol ToDoListPresenterOutputProtocol: AnyObject {
+    func showShareActionAlert()
+}
+
 class ToDoTableViewCell: UITableViewCell {
     private let isCompletedIconColor = UIColor(hex: "#FED702")
     private let isNotCompletedIconColor = UIColor(hex: "#4D555E")
     private let isCompletedImage = UIImage(systemName: "checkmark.circle")
     private let isNotCompletedImage = UIImage(systemName: "circle")
     private let textColor = UIColor(hex: "#F4F4F4")
+    private let contextMenuButtonBackgroundColor =  UIColor(hex: "#EDEDEDCC")
     private let iconSize = 24
     
     private var isCompletedButton: UIButton!
@@ -37,6 +42,9 @@ class ToDoTableViewCell: UITableViewCell {
         setupDateTextField()
         
         setupLayout()
+        
+        let menu = UIContextMenuInteraction(delegate: self)
+        contentView.addInteraction(menu)
     }
     
     required init?(coder: NSCoder) {
@@ -181,5 +189,28 @@ extension ToDoTableViewCell {
             isCompletedButton.widthAnchor.constraint(equalToConstant: imageSize.width),
             isCompletedButton.heightAnchor.constraint(equalToConstant: imageSize.height),
         ])
+    }
+}
+
+extension ToDoTableViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+                let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in
+                    //TODO: add logic
+                }
+                
+                let shareAction = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { [self] _ in
+                    presenter?.shareActionTapped()
+                }
+                
+                let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
+                    //TODO: add logic
+                }
+                
+                return UIMenu(title: "", children: [editAction, shareAction, deleteAction])
+            }
     }
 }

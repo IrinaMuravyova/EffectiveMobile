@@ -16,6 +16,7 @@ protocol ToDoListPresenterProtocol: AnyObject {
     func getTodosCount() -> Int 
     func getTodosCountString() -> String
     func clearSearchResult()
+    func shareActionTapped()
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
@@ -87,6 +88,12 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
     func clearSearchResult() {
         todos = todosBeforeFiltering
         didFilteredToDoList(todos)
+    }
+    
+    func shareActionTapped() {
+        DispatchQueue.main.async { [self] in
+            view?.showShareActionAlert()
+        }
     }
 }
 

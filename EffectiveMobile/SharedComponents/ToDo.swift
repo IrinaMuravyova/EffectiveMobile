@@ -8,55 +8,30 @@
 import Foundation
 
 struct ToDo {
+    let id: UUID
     var title: String
     var description: String
     var date: String
     var isCompleted: Bool
-    
-    //debugging data
-    static func getTodos() -> [ToDo] {
-        [
-            ToDo(
-                title: "Task1",
-                description: "Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1Description1",
-                date: "03.03.2025",
-                isCompleted: true),
-            ToDo(
-                title: "Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2Task2",
-                description: "Description2",
-                date: "03.03.2025",
-                isCompleted: false),
-            ToDo(
-                title: "Task3",
-                description: "Description3",
-                date: "03.03.2025",
-                isCompleted: false),
-            ToDo(
-                title: "Task4",
-                description: "Description4",
-                date: "03.03.2025",
-                isCompleted: true),
-            ToDo(
-                title: "Task5",
-                description: "Description5",
-                date: "04.03.2025",
-                isCompleted: false),
-            ToDo(
-                title: "Task6",
-                description: "Description6",
-                date: "05.03.2025",
-                isCompleted: false),
-            ToDo(
-                title: "Task7",
-                description: "Description7",
-                date: "06.03.2025",
-                isCompleted: true),
-            ToDo(
-                title: "Task8",
-                description: "Description8",
-                date: "07.03.2025",
-                isCompleted: false)
+
+    init(id: UUID, title: String, description: String, date: String, isCompleted: Bool) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.date = date
+        self.isCompleted = isCompleted
+    }
             
-        ]
+    init?(from toDoCD: ToDoCD) {
+        guard let id = toDoCD.id,
+              let title = toDoCD.title,
+              let description = toDoCD.todoDescription,
+              let date = toDoCD.date else { return nil }
+        
+        self.id = id
+        self.title = title
+        self.description = description
+        self.date = date
+        self.isCompleted = toDoCD.isCompleted
     }
 }

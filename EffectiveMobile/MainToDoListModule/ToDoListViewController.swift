@@ -10,6 +10,7 @@ import UIKit
 protocol ToDoListViewProtocol: AnyObject {
     func updateFooter()
     func reloadTableView()
+    func showShareActionAlert()
 }
 
 final class ToDoListViewController: UIViewController {
@@ -18,6 +19,7 @@ final class ToDoListViewController: UIViewController {
     private let footerColor = UIColor(hex: "#272729")
     private let searchCancelButtonColor = UIColor(hex: "#272729")
     private let footerButtonColor = UIColor(hex: "#FED702")
+    private let alertButtonColor = UIColor(hex: "#FED702")
     private var tableView: UITableView!
     private var toolBar = UIToolbar()
     private let footerLabel = UILabel()
@@ -141,6 +143,20 @@ extension ToDoListViewController: ToDoListViewProtocol {
     
     func updateFooter() {
         footerLabel.text = presenter?.getTodosCountString()
+    }
+    
+    func showShareActionAlert() {
+        let alert = UIAlertController(title: "Функция в разработке",
+                                      message: "Мы скоро добавим эту функцию",
+                                      preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "ОК", style: .default, handler: nil)
+        okAction.setValue(alertButtonColor, forKey: "titleTextColor")
+        alert.addAction(okAction)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
     }
 }
 

@@ -30,18 +30,18 @@ class Repository: RepositoryProtocol {
     func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
         
         DispatchQueue.global(qos: .background).async {
-            UserDefaults.standard.set(true, forKey: "isFirstLaunch") // debugging code
+//            UserDefaults.standard.set(true, forKey: "isFirstLaunch") // debugging code
             let isFirstLaunch = self.userDefaults.bool(forKey: self.isFirstLaunchKey)
     
             if isFirstLaunch {
                 self.networkManager.fetchToDos { result in
                     switch result {
                     case .success(let todos):
-                        // TODO:  save to coreData
-                        
+                        self.dataManager.update(todos) { _ in
                             DispatchQueue.main.async {
                                 completion(.success(todos))
                                 self.userDefaults.set(false, forKey: self.isFirstLaunchKey)
+                            }
                         }
                     case .failure(let error):
                         DispatchQueue.main.async {
@@ -50,7 +50,19 @@ class Repository: RepositoryProtocol {
                     }
                 }
             } else {
-                // TODO:  add load from coreData
+                self.dataManager.getTodos { localTodosResult in
+                    switch localTodosResult {
+                    case .success(let localTodos):
+                        if !localTodos.isEmpty {
+                            DispatchQueue.main.async {
+                                completion(.success(localTodos))
+                            }
+                            return
+                        }
+                    case .failure:
+                        break
+                    }
+                }
             }
         }
     }

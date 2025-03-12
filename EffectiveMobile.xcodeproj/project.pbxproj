@@ -13,13 +13,14 @@
 		880516152D8011D900F0A3F3 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880516142D8011D900F0A3F3 /* Repository.swift */; };
 		880516172D80125300F0A3F3 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880516162D80125300F0A3F3 /* CoreDataManager.swift */; };
 		880516192D80140500F0A3F3 /* APIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880516182D80140500F0A3F3 /* APIModels.swift */; };
+		887BDDA72D80812400F5473A /* EffectiveMobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887BDDA62D80812400F5473A /* EffectiveMobileTests.swift */; };
 		88BC640F2D7F1A4E008546EA /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BC640E2D7F1A4E008546EA /* ToDo.swift */; };
 		88BC64122D7F1E2E008546EA /* ToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BC64112D7F1E2E008546EA /* ToDoTableViewCell.swift */; };
 		88BC64142D7F26A3008546EA /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BC64132D7F26A3008546EA /* UIColor+Hex.swift */; };
 		88C182F32D7EF63F0081D1FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F22D7EF63F0081D1FE /* AppDelegate.swift */; };
 		88C182F52D7EF63F0081D1FE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F42D7EF63F0081D1FE /* SceneDelegate.swift */; };
 		88C182F72D7EF63F0081D1FE /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C182F62D7EF63F0081D1FE /* ToDoListViewController.swift */; };
-		88C182FD2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 88C182FB2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld */; };
+		88C182FD2D7EF63F0081D1FE /* ToDoCD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 88C182FB2D7EF63F0081D1FE /* ToDoCD.xcdatamodeld */; };
 		88C182FF2D7EF6400081D1FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88C182FE2D7EF6400081D1FE /* Assets.xcassets */; };
 		88C183022D7EF6400081D1FE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 88C183012D7EF6400081D1FE /* Base */; };
 		88C1830E2D7EFDCC0081D1FE /* ToDoListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1830D2D7EFDCC0081D1FE /* ToDoListPresenter.swift */; };
@@ -28,6 +29,16 @@
 		88C183142D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C183132D7EFDEB0081D1FE /* ToDoListModuleConfigurator.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		887BDDA82D80812400F5473A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 88C182E72D7EF63F0081D1FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 88C182EE2D7EF63F0081D1FE;
+			remoteInfo = EffectiveMobile;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		8805160D2D7FEF2900F0A3F3 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8805160F2D80038700F0A3F3 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -35,6 +46,8 @@
 		880516142D8011D900F0A3F3 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		880516162D80125300F0A3F3 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		880516182D80140500F0A3F3 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
+		887BDDA42D80812400F5473A /* EffectiveMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EffectiveMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		887BDDA62D80812400F5473A /* EffectiveMobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectiveMobileTests.swift; sourceTree = "<group>"; };
 		88BC640E2D7F1A4E008546EA /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		88BC64112D7F1E2E008546EA /* ToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewCell.swift; sourceTree = "<group>"; };
 		88BC64132D7F26A3008546EA /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
@@ -53,6 +66,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		887BDDA12D80812400F5473A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88C182EC2D7EF63F0081D1FE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -74,6 +94,14 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		887BDDA52D80812400F5473A /* EffectiveMobileTests */ = {
+			isa = PBXGroup;
+			children = (
+				887BDDA62D80812400F5473A /* EffectiveMobileTests.swift */,
+			);
+			path = EffectiveMobileTests;
+			sourceTree = "<group>";
+		};
 		88BC64102D7F1A54008546EA /* SharedComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				88C182F12D7EF63F0081D1FE /* EffectiveMobile */,
+				887BDDA52D80812400F5473A /* EffectiveMobileTests */,
 				88C182F02D7EF63F0081D1FE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				88C182EF2D7EF63F0081D1FE /* EffectiveMobile.app */,
+				887BDDA42D80812400F5473A /* EffectiveMobileTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -136,7 +166,7 @@
 		88C1830B2D7EF6FA0081D1FE /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				88C182FB2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld */,
+				88C182FB2D7EF63F0081D1FE /* ToDoCD.xcdatamodeld */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -157,6 +187,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		887BDDA32D80812400F5473A /* EffectiveMobileTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 887BDDAA2D80812400F5473A /* Build configuration list for PBXNativeTarget "EffectiveMobileTests" */;
+			buildPhases = (
+				887BDDA02D80812400F5473A /* Sources */,
+				887BDDA12D80812400F5473A /* Frameworks */,
+				887BDDA22D80812400F5473A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				887BDDA92D80812400F5473A /* PBXTargetDependency */,
+			);
+			name = EffectiveMobileTests;
+			productName = EffectiveMobileTests;
+			productReference = 887BDDA42D80812400F5473A /* EffectiveMobileTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		88C182EE2D7EF63F0081D1FE /* EffectiveMobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 88C183062D7EF6400081D1FE /* Build configuration list for PBXNativeTarget "EffectiveMobile" */;
@@ -184,6 +232,10 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					887BDDA32D80812400F5473A = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 88C182EE2D7EF63F0081D1FE;
+					};
 					88C182EE2D7EF63F0081D1FE = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -203,11 +255,19 @@
 			projectRoot = "";
 			targets = (
 				88C182EE2D7EF63F0081D1FE /* EffectiveMobile */,
+				887BDDA32D80812400F5473A /* EffectiveMobileTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		887BDDA22D80812400F5473A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88C182ED2D7EF63F0081D1FE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -220,6 +280,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		887BDDA02D80812400F5473A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				887BDDA72D80812400F5473A /* EffectiveMobileTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88C182EB2D7EF63F0081D1FE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -228,7 +296,7 @@
 				88C182F72D7EF63F0081D1FE /* ToDoListViewController.swift in Sources */,
 				880516152D8011D900F0A3F3 /* Repository.swift in Sources */,
 				880516102D80038700F0A3F3 /* Date+Extension.swift in Sources */,
-				88C182FD2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld in Sources */,
+				88C182FD2D7EF63F0081D1FE /* ToDoCD.xcdatamodeld in Sources */,
 				88C182F32D7EF63F0081D1FE /* AppDelegate.swift in Sources */,
 				88C1830E2D7EFDCC0081D1FE /* ToDoListPresenter.swift in Sources */,
 				88BC64142D7F26A3008546EA /* UIColor+Hex.swift in Sources */,
@@ -246,6 +314,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		887BDDA92D80812400F5473A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 88C182EE2D7EF63F0081D1FE /* EffectiveMobile */;
+			targetProxy = 887BDDA82D80812400F5473A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		88C183002D7EF6400081D1FE /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -258,6 +334,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		887BDDAB2D80812400F5473A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LZP4UC5RAY;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = IM.EffectiveMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EffectiveMobile.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EffectiveMobile";
+			};
+			name = Debug;
+		};
+		887BDDAC2D80812400F5473A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LZP4UC5RAY;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = IM.EffectiveMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EffectiveMobile.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EffectiveMobile";
+			};
+			name = Release;
+		};
 		88C183042D7EF6400081D1FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -391,6 +503,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -422,6 +535,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -442,6 +556,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		887BDDAA2D80812400F5473A /* Build configuration list for PBXNativeTarget "EffectiveMobileTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				887BDDAB2D80812400F5473A /* Debug */,
+				887BDDAC2D80812400F5473A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		88C182EA2D7EF63F0081D1FE /* Build configuration list for PBXProject "EffectiveMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -463,13 +586,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		88C182FB2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodeld */ = {
+		88C182FB2D7EF63F0081D1FE /* ToDoCD.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				88C182FC2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodel */,
 			);
 			currentVersion = 88C182FC2D7EF63F0081D1FE /* EffectiveMobile.xcdatamodel */;
-			path = EffectiveMobile.xcdatamodeld;
+			path = ToDoCD.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
