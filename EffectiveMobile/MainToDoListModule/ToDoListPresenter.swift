@@ -40,17 +40,23 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
     func updateSearchResult(with query: String) {
         todos = todosBeforeFiltering
         
-        if query.isEmpty {
-                todos = todosBeforeFiltering
-        } else {
+        guard !query.isEmpty else {
+            todos = todosBeforeFiltering
+            return
+        }
+            
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
             let filteredTodos = todos.filter { todo in
                 let titleContains = todo.title.lowercased().contains(query.lowercased())
                 let descriptionContains = todo.description.lowercased().contains(query.lowercased())
                 let dateContains = todo.date.contains(query.lowercased())
                 
                 return titleContains || descriptionContains || dateContains
+        }
+        
+            DispatchQueue.main.async { [self] in
+                didFilteredToDoList(filteredTodos)
             }
-            didFilteredToDoList(filteredTodos)
         }
     }
     
