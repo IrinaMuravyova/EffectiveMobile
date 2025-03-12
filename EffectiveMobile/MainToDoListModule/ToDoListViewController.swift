@@ -11,6 +11,7 @@ protocol ToDoListViewProtocol: AnyObject {
     func updateFooter()
     func reloadTableView()
     func showShareActionAlert()
+    func updateTodoStatus(for id: UUID, at index: IndexPath)
 }
 
 final class ToDoListViewController: UIViewController {
@@ -158,6 +159,10 @@ extension ToDoListViewController: ToDoListViewProtocol {
             self.present(alert, animated: true)
         }
     }
+    
+    func updateTodoStatus(for id: UUID, at index: IndexPath) {
+        tableView.reloadRows(at: [index], with: .automatic)
+    }
 }
 
 
@@ -182,7 +187,7 @@ extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? ToDoTableViewCell else { return UITableViewCell() }
         cell.presenter = presenter
-        presenter?.configure(cell: cell, at: indexPath.row)    
+        presenter?.configure(cell: cell, at: indexPath)
         return cell
     }
 }

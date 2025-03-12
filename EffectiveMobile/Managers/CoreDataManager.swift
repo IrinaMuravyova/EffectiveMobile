@@ -13,6 +13,7 @@ protocol CoreDataManagerProtocol: AnyObject {
     func deleteToDo(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
     func createToDo(with toDo: ToDo)
     func updateToDo(_ toDo: ToDo, completion: @escaping (Result<Void, any Error>) -> Void)
+    func changeCompletionState(for id: UUID, with state: Bool)
 }
 
 class CoreDataManager {
@@ -129,11 +130,11 @@ extension CoreDataManager: CoreDataManagerProtocol {
         
         backgroundContext.perform { [self] in
             do {
-                if let taskToUpdate = try backgroundContext.fetch(fetchRequest).first {
-                    taskToUpdate.title = toDo.title
-                    taskToUpdate.todoDescription = toDo.description
-                    taskToUpdate.date = toDo.date
-                    taskToUpdate.isCompleted = toDo.isCompleted
+                if let todoToUpdate = try backgroundContext.fetch(fetchRequest).first {
+                    todoToUpdate.title = toDo.title
+                    todoToUpdate.todoDescription = toDo.description
+                    todoToUpdate.date = toDo.date
+                    todoToUpdate.isCompleted = toDo.isCompleted
                     
                     try backgroundContext.save()
                     completion(.success(()))
@@ -142,6 +143,24 @@ extension CoreDataManager: CoreDataManagerProtocol {
                 }
             } catch {
                 completion(.failure(error))
+            }
+        }
+    }
+    
+    func changeCompletionState(for id: UUID, with state: Bool) {
+        let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        
+        backgroundContext.perform { [self] in
+            do {
+                if let todoToUpdate = try backgroundContext.fetch(fetchRequest).first {
+                    todoToUpdate.isCompleted = state
+                    try backgroundContext.save()
+                } else {
+                    print("Task not found")
+                }
+            } catch {
+                print("Failed to update task: \(error.localizedDescription)")
             }
         }
     }

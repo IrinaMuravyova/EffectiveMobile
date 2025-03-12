@@ -11,6 +11,7 @@ protocol ToDoListInteractorProtocol: AnyObject {
     func fetchData()
     func getData()
     func deleteTodo(with id: UUID)
+    func markTodoCompleted(for id: UUID, with state: Bool)
 }
 
 protocol ToDoListRepositoryOutputProtocol: AnyObject {
@@ -57,6 +58,10 @@ extension ToDoListInteractor: ToDoListInteractorProtocol {
     func deleteTodo(with id: UUID) {
         self.repository?.deleteTodo(with: id)
         self.todoDidDeleted(with: id)
+    }
+    
+    func markTodoCompleted(for id: UUID, with state: Bool){
+        repository?.changeTodoComplete(for: id, with: state)
     }
 }
 

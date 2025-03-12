@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ToDoTableViewCellProtocol: AnyObject {
-    func configure(with todo: ToDo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void)
+    func configure(with todo: ToDo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void, onMarkCompleted: @escaping () -> Void)
     func isCompletedConfigure(with todo: ToDo)
     func isNotCompletedConfigure(with todo: ToDo)
 }
@@ -34,6 +34,7 @@ class ToDoTableViewCell: UITableViewCell {
     private var onEdit: (() -> Void)?
     private var onShare: (() -> Void)?
     private var onDelete: (() -> Void)?
+    private var onMarkCompleted: (() -> Void)?
     
     var presenter: ToDoListPresenterProtocol?
 
@@ -52,25 +53,26 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-   
-        isCompletedButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        fatalError("init(coder:) has not been implemented")
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        presenter?.markToDoIsCompleted()
+        onMarkCompleted?()
     }
 }
 
 extension ToDoTableViewCell: ToDoTableViewCellProtocol {
-    func configure(with todo: ToDo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void) {
+    func configure(
+        with todo: ToDo,
+        onEdit: @escaping () -> Void,
+        onShare: @escaping () -> Void,
+        onDelete: @escaping () -> Void,
+        onMarkCompleted: @escaping () -> Void
+    ) {
         self.onEdit = onEdit
         self.onShare = onShare
         self.onDelete = onDelete
+        self.onMarkCompleted = onMarkCompleted
         
         descriptionTextView.text = todo.description
         if let date = Date.fromString(todo.date) {
@@ -119,7 +121,10 @@ extension ToDoTableViewCell {
         
         isCompletedButton.configuration = .plain()
         isCompletedButton.translatesAutoresizingMaskIntoConstraints = false
+        isCompletedButton.isEnabled = true
     
+        isCompletedButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        
         contentView.addSubview(isCompletedButton)
     }
     

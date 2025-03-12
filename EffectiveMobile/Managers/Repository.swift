@@ -11,6 +11,7 @@ protocol RepositoryProtocol {
     func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func deleteTodo(with: UUID)
+    func changeTodoComplete(for id: UUID, with state: Bool)
 }
 
 class Repository: RepositoryProtocol {
@@ -72,6 +73,12 @@ class Repository: RepositoryProtocol {
             case .failure(let error):
                 print("Failed to delete task: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    func changeTodoComplete(for id: UUID, with state: Bool) {
+        DispatchQueue.global(qos: .background).async { [self] in
+            dataManager.changeCompletionState(for: id, with: state)
         }
     }
 }

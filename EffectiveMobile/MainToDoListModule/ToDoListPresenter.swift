@@ -9,11 +9,11 @@ import Foundation
 
 protocol ToDoListPresenterProtocol: AnyObject {
     func updateSearchResult(with query: String)
-    func markToDoIsCompleted()
+    func completeButtonTapped(for id: UUID, at index: IndexPath)
     func createToDo()
     func fetchData()
-    func configure(cell: ToDoTableViewCell, at index: Int)
-    func getTodosCount() -> Int 
+    func configure(cell: ToDoTableViewCell, at index: IndexPath)
+    func getTodosCount() -> Int
     func getTodosCountString() -> String
     func clearSearchResult()
 }
@@ -54,8 +54,13 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         }
     }
     
-    func markToDoIsCompleted() {
-        // TODO: add todo's mark logic
+    func completeButtonTapped(for id: UUID, at index: IndexPath) {
+        
+        if let todoIndex = todos.firstIndex(where: { $0.id == id }) {
+            todos[todoIndex].isCompleted.toggle()
+            interactor?.markTodoCompleted(for: id, with: todos[todoIndex].isCompleted)
+        }
+        view?.updateTodoStatus(for: id, at: index)
     }
     
     func createToDo() {
@@ -66,8 +71,8 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         interactor?.fetchData()
     }
     
-    func configure(cell: ToDoTableViewCell, at index: Int) {
-        let todo = todos[index]
+    func configure(cell: ToDoTableViewCell, at index: IndexPath) {
+        let todo = todos[index.row]
         cell.configure(
             with: todo,
             onEdit: { [weak self] in
@@ -81,6 +86,9 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
             onDelete: { [weak self] in
                 self?.interactor?.deleteTodo(with: todo.id)
                 self?.todoDidDeleted(with: todo.id)
+            },
+            onMarkCompleted: { [weak self] in
+                self?.completeButtonTapped(for: todo.id, at: index)
             }
         )
         
