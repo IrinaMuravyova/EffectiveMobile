@@ -66,7 +66,6 @@ extension CoreDataManager: CoreDataManagerProtocol {
                 let todos = toDoCDs.compactMap {
                         ToDo(from: $0)
                     }
-                print("Todos has been fetched from CoreData")
                 completion(.success(todos))
             } catch {
                 print("CoreData fetch error: \(error)")
@@ -80,7 +79,6 @@ extension CoreDataManager: CoreDataManagerProtocol {
             do {
                 self?.deleteTodos()
                 todos.forEach {self?.createToDo(with: $0)}
-                print("Todos has been saved at CoreData")
                 try self?.mainContext.save()
                 completion(.success(()))
             } catch {

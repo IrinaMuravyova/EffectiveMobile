@@ -8,7 +8,9 @@
 import Foundation
 
 protocol RepositoryProtocol {
+    func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
+    func deleteTodo(with: UUID)
 }
 
 class Repository: RepositoryProtocol {
@@ -16,6 +18,7 @@ class Repository: RepositoryProtocol {
     private let dataManager: CoreDataManagerProtocol
     private let userDefaults: UserDefaults
     private let isFirstLaunchKey = "isFirstLaunch"
+    weak var interactor: ToDoListRepositoryOutputProtocol?
     
     init(
         networkManager: NetworkManagerProtocol,
@@ -27,7 +30,7 @@ class Repository: RepositoryProtocol {
         self.userDefaults = userDefaults
     }
     
-    func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+    func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
         
         DispatchQueue.global(qos: .background).async {
 //            UserDefaults.standard.set(true, forKey: "isFirstLaunch") // debugging code
@@ -50,19 +53,43 @@ class Repository: RepositoryProtocol {
                     }
                 }
             } else {
-                self.dataManager.getTodos { localTodosResult in
-                    switch localTodosResult {
-                    case .success(let localTodos):
-                        if !localTodos.isEmpty {
-                            DispatchQueue.main.async {
-                                completion(.success(localTodos))
-                            }
-                            return
-                        }
-                    case .failure:
-                        break
+                self.loadLocalToDos(completion: completion)
+            }
+        }
+    }
+    
+    func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            self.loadLocalToDos(completion: completion)
+        }
+    }
+    
+    func deleteTodo(with id: UUID) {
+        dataManager.deleteToDo(with: id) { [weak self] result in
+            switch result {
+            case .success:
+                self?.interactor?.todoDidDeleted(with: id)
+            case .failure(let error):
+                print("Failed to delete task: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+// MARK:- Private methods
+extension Repository {
+    private func loadLocalToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+        self.dataManager.getTodos { localTodosResult in
+            switch localTodosResult {
+            case .success(let localTodos):
+                if !localTodos.isEmpty {
+                    DispatchQueue.main.async {
+                        completion(.success(localTodos))
                     }
+                    return
                 }
+            case .failure:
+                break
             }
         }
     }

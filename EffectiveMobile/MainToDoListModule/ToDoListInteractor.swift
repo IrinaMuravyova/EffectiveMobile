@@ -8,7 +8,13 @@
 import Foundation
 
 protocol ToDoListInteractorProtocol: AnyObject {
+    func fetchData()
     func getData()
+    func deleteTodo(with id: UUID)
+}
+
+protocol ToDoListRepositoryOutputProtocol: AnyObject {
+    func todoDidDeleted(with id: UUID)
 }
 
 class ToDoListInteractor {
@@ -17,9 +23,9 @@ class ToDoListInteractor {
 }
 
 extension ToDoListInteractor: ToDoListInteractorProtocol {
-    func getData() {
+    func fetchData() {
         DispatchQueue.global(qos: .background).async {
-            self.repository?.getToDos { result in
+            self.repository?.fetchToDos { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let todos):
@@ -31,5 +37,31 @@ extension ToDoListInteractor: ToDoListInteractorProtocol {
                 }
             }
         }
+    }
+
+    func getData() {
+        DispatchQueue.global(qos: .background).async {
+            self.repository?.getToDos { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let todos):
+                        self?.presenter?.didLoadToDoList(todos)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        }
+    }
+    
+    func deleteTodo(with id: UUID) {
+        self.repository?.deleteTodo(with: id)
+        self.todoDidDeleted(with: id)
+    }
+}
+
+extension ToDoListInteractor: ToDoListRepositoryOutputProtocol {
+    func todoDidDeleted(with id: UUID) {
+        presenter?.todoDidDeleted(with: id)
     }
 }

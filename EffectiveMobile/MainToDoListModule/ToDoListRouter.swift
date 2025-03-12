@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ToDoListRouterProtocol: AnyObject {
-    
+    func navigateToEditTodo(with: UUID)
 }
 
 class ToDoListRouter {
@@ -16,5 +16,7 @@ class ToDoListRouter {
 }
 
 extension ToDoListRouter: ToDoListRouterProtocol {
-    
+    func navigateToEditTodo(with: UUID) {
+       //TODO: add code
+    }
 }

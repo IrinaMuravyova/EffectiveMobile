@@ -29,7 +29,7 @@ final class ToDoListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        presenter?.getData()
+        presenter?.fetchData()
     }
     
     @objc private func addTapped() {

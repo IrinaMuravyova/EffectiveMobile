@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ToDoTableViewCellProtocol: AnyObject {
-    func configure(with todo: ToDo)
+    func configure(with todo: ToDo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void)
     func isCompletedConfigure(with todo: ToDo)
     func isNotCompletedConfigure(with todo: ToDo)
 }
@@ -30,6 +30,10 @@ class ToDoTableViewCell: UITableViewCell {
     private var titleTextView: UITextView!
     private var descriptionTextView: UITextView!
     private var dateTextView: UITextView!
+    
+    private var onEdit: (() -> Void)?
+    private var onShare: (() -> Void)?
+    private var onDelete: (() -> Void)?
     
     var presenter: ToDoListPresenterProtocol?
 
@@ -63,7 +67,11 @@ class ToDoTableViewCell: UITableViewCell {
 }
 
 extension ToDoTableViewCell: ToDoTableViewCellProtocol {
-    func configure(with todo: ToDo) {
+    func configure(with todo: ToDo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void) {
+        self.onEdit = onEdit
+        self.onShare = onShare
+        self.onDelete = onDelete
+        
         descriptionTextView.text = todo.description
         if let date = Date.fromString(todo.date) {
             let formattedDate = date.formattedString()
@@ -198,16 +206,17 @@ extension ToDoTableViewCell: UIContextMenuInteractionDelegate {
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+             
                 let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in
-                    //TODO: add logic
+                    self.onEdit?()
                 }
                 
                 let shareAction = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { [self] _ in
-                    presenter?.shareActionTapped()
+                    self.onShare?()
                 }
                 
                 let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
-                    //TODO: add logic
+                    self.onDelete?()
                 }
                 
                 return UIMenu(title: "", children: [editAction, shareAction, deleteAction])

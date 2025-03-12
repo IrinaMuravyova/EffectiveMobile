@@ -11,17 +11,17 @@ protocol ToDoListPresenterProtocol: AnyObject {
     func updateSearchResult(with query: String)
     func markToDoIsCompleted()
     func createToDo()
-    func getData()
+    func fetchData()
     func configure(cell: ToDoTableViewCell, at index: Int)
     func getTodosCount() -> Int 
     func getTodosCountString() -> String
     func clearSearchResult()
-    func shareActionTapped()
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
     func didLoadToDoList(_ todos: [ToDo])
     func setFilteredTodos()
+    func todoDidDeleted(with id: UUID)
 }
 
 class ToDoListPresenter {
@@ -62,13 +62,27 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         // TODO: add create todo logic
     }
 
-    func getData() {
-        interactor?.getData()
+    func fetchData() {
+        interactor?.fetchData()
     }
     
     func configure(cell: ToDoTableViewCell, at index: Int) {
         let todo = todos[index]
-        cell.configure(with: todo)
+        cell.configure(
+            with: todo,
+            onEdit: { [weak self] in
+                self?.router?.navigateToEditTodo(with: todo.id)
+            },
+            onShare: { [weak self] in
+                DispatchQueue.main.async { [weak self] in
+                    self?.view?.showShareActionAlert()
+                }
+            },
+            onDelete: { [weak self] in
+                self?.interactor?.deleteTodo(with: todo.id)
+                self?.todoDidDeleted(with: todo.id)
+            }
+        )
         
         if todo.isCompleted {
             cell.isCompletedConfigure(with: todo)
@@ -89,12 +103,6 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         todos = todosBeforeFiltering
         didFilteredToDoList(todos)
     }
-    
-    func shareActionTapped() {
-        DispatchQueue.main.async { [self] in
-            view?.showShareActionAlert()
-        }
-    }
 }
 
 extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
@@ -105,6 +113,12 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
     
     func setFilteredTodos() {
         todosBeforeFiltering = self.todos
+    }
+    
+    func todoDidDeleted(with id: UUID) {
+        todos.removeAll { $0.id == id }
+        viewReload()
+        interactor?.getData()
     }
 }
 
