@@ -61,7 +61,7 @@ extension ToDoListInteractor: ToDoListInteractorProtocol {
     }
     
     func markTodoCompleted(for id: UUID, with state: Bool){
-        repository?.changeTodoComplete(for: id, with: state)
+        repository?.changeTodoComplete(for: id, with: state) { _ in }
     }
 }
 

@@ -11,9 +11,9 @@ protocol CoreDataManagerProtocol: AnyObject {
     func getTodos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func update(_ todos: [ToDo], completion: @escaping (Result<Void, Error>) -> Void)
     func deleteToDo(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
-    func createToDo(with toDo: ToDo)
+    func createToDo(with toDo: ToDo, completion: @escaping (Result<Void, Error>) -> Void)
     func updateToDo(_ toDo: ToDo, completion: @escaping (Result<Void, any Error>) -> Void)
-    func changeCompletionState(for id: UUID, with state: Bool)
+    func changeCompletionState(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 class CoreDataManager {
@@ -36,21 +36,45 @@ class CoreDataManager {
         }
         
         backgroundContext = persistentContainer.newBackgroundContext()
+        backgroundContext.automaticallyMergesChangesFromParent = true
     }
 }
 // MARK: - Private methods
 extension CoreDataManager {
-    private func deleteTodos() {
-        let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
-
-        do {
-            let todos = try mainContext.fetch(fetchRequest)
-            for todo in todos {
-                mainContext.delete(todo)
+    private func deleteTodos(completion: @escaping (Result<Void, Error>) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
+            
+            let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
+            
+            do {
+                let todos = try backgroundContext.fetch(fetchRequest)
+                for todo in todos {
+                    backgroundContext.delete(todo)
+                }
+                try self.backgroundContext.save()
+                completion(.success(()))
+            } catch {
+                print("CoreData delete error: \(error)")
+                completion(.failure(error))
             }
-            try mainContext.save()
-        } catch {
-            print("CoreData delete error: \(error)")
+        }
+    }
+    
+    private func saveBackgroundContext(completion: @escaping (Result<Void, Error>) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
+            
+            if self.backgroundContext.hasChanges {
+                do {
+                    try self.backgroundContext.save()
+                    completion(.success(()))
+                } catch {
+                    completion(.failure(error))
+                }
+            } else {
+                completion(.success(()))
+            }
         }
     }
 }
@@ -59,11 +83,13 @@ extension CoreDataManager {
 extension CoreDataManager: CoreDataManagerProtocol {
     
     func getTodos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
-        let fetchRequest = NSFetchRequest<ToDoCD>(entityName: "ToDoCD")
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
             
-        mainContext.perform {
+            let fetchRequest = NSFetchRequest<ToDoCD>(entityName: "ToDoCD")
+                
             do {
-                let toDoCDs = try self.mainContext.fetch(fetchRequest)
+                let toDoCDs = try self.backgroundContext.fetch(fetchRequest)
                 let todos = toDoCDs.compactMap {
                         ToDo(from: $0)
                     }
@@ -76,28 +102,32 @@ extension CoreDataManager: CoreDataManagerProtocol {
     }
     
     func update(_ todos: [ToDo], completion: @escaping (Result<Void, Error>) -> Void) {
-        mainContext.perform {[weak self] in
-            do {
-                self?.deleteTodos()
-                todos.forEach {self?.createToDo(with: $0)}
-                try self?.mainContext.save()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
+        backgroundContext.perform {[weak self] in
+            guard let self = self else { return }
+          
+            self.deleteTodos { result in
+                switch result {
+                case .success:
+                    todos.forEach {self.createToDo(with: $0) { _ in } }
+                    self.saveBackgroundContext(completion: completion)
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
     }
     
     func deleteToDo(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
-        let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        
-        backgroundContext.perform { [self] in
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
+                    
+            let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+     
             do {
                 if let taskToDelete = try backgroundContext.fetch(fetchRequest).first {
                     backgroundContext.delete(taskToDelete)
-                    try backgroundContext.save()
-                    completion(.success(()))
+                    self.saveBackgroundContext(completion: completion)
                 } else {
                     print("Task not found")
                 }
@@ -107,8 +137,10 @@ extension CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func createToDo(with toDo: ToDo) {
-        backgroundContext.perform {
+    func createToDo(with toDo: ToDo, completion: @escaping (Result<Void, Error>) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
+
             let newToDoCD = ToDoCD(context: self.backgroundContext)
             newToDoCD.id = toDo.id
             newToDoCD.title = toDo.title
@@ -116,19 +148,17 @@ extension CoreDataManager: CoreDataManagerProtocol {
             newToDoCD.date = toDo.date
             newToDoCD.isCompleted = toDo.isCompleted
             
-            do {
-                try self.backgroundContext.save()
-            } catch {
-                print("Saving error: \(error)")
-            }
+            self.saveBackgroundContext(completion: completion)
         }
     }
     
     func updateToDo(_ toDo: ToDo, completion: @escaping (Result<Void, any Error>) -> Void) {
-        let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", toDo.id as CVarArg)
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
+                        
+            let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", toDo.id as CVarArg)
         
-        backgroundContext.perform { [self] in
             do {
                 if let todoToUpdate = try backgroundContext.fetch(fetchRequest).first {
                     todoToUpdate.title = toDo.title
@@ -136,8 +166,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
                     todoToUpdate.date = toDo.date
                     todoToUpdate.isCompleted = toDo.isCompleted
                     
-                    try backgroundContext.save()
-                    completion(.success(()))
+                    self.saveBackgroundContext(completion: completion)
                 } else {
                     print("Task not found")
                 }
@@ -147,15 +176,17 @@ extension CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func changeCompletionState(for id: UUID, with state: Bool) {
-        let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+    func changeCompletionState(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self = self else { return }
+            
+            let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
-        backgroundContext.perform { [self] in
             do {
                 if let todoToUpdate = try backgroundContext.fetch(fetchRequest).first {
                     todoToUpdate.isCompleted = state
-                    try backgroundContext.save()
+                    self.saveBackgroundContext(completion: completion)
                 } else {
                     print("Task not found")
                 }

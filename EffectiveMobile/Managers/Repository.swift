@@ -11,7 +11,7 @@ protocol RepositoryProtocol {
     func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func deleteTodo(with: UUID)
-    func changeTodoComplete(for id: UUID, with state: Bool)
+    func changeTodoComplete(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 class Repository: RepositoryProtocol {
@@ -76,9 +76,12 @@ class Repository: RepositoryProtocol {
         }
     }
     
-    func changeTodoComplete(for id: UUID, with state: Bool) {
-        DispatchQueue.global(qos: .background).async { [self] in
-            dataManager.changeCompletionState(for: id, with: state)
+    func changeTodoComplete(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+    
+        dataManager.changeCompletionState(for: id, with: state) { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
 }
