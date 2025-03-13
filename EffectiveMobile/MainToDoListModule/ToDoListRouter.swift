@@ -12,11 +12,18 @@ protocol ToDoListRouterProtocol: AnyObject {
 }
 
 class ToDoListRouter {
-    weak var view: ToDoListViewProtocol?
+    weak var view: ToDoListViewController?
 }
 
 extension ToDoListRouter: ToDoListRouterProtocol {
     func navigateToEditTodo(with: UUID) {
-       //TODO: add code
+        
+        guard let view = view else {
+            print("ToDoListViewController is nil")
+            return
+        }
+       
+        let editTodoViewController = EditTodoModuleConfigurator.configure()
+        view.navigationController?.pushViewController(editTodoViewController, animated: true)
     }
 }

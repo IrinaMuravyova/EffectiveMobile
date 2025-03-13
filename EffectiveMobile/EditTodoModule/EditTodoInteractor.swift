@@ -6,3 +6,24 @@
 //
 
 import Foundation
+
+protocol EditTodoInteractorProtocol: AnyObject {
+
+}
+
+protocol EditTodoRepositoryOutputProtocol: AnyObject {
+
+}
+
+class EditTodoInteractor {
+    weak var presenter: EditTodoInteractorOutputProtocol?
+    var repository: RepositoryProtocol?
+}
+
+extension EditTodoInteractor: EditTodoInteractorProtocol {
+    
+}
+
+extension EditTodoInteractor: EditTodoRepositoryOutputProtocol {
+
+}

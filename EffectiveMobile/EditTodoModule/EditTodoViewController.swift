@@ -1,8 +1,86 @@
 //
-//  EditTodoModuleViewController.swift
+//  EditTodoViewController.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 13.03.2025.
 //
 
-import Foundation
+import UIKit
+
+protocol EditTodoViewProtocol: AnyObject {
+    func displayTodo()
+}
+
+class EditTodoViewController: UIViewController {
+    private var titleTextView = BaseTodoTitle()
+    private var descriptionTextView = BaseTodoDescription()
+    private var dateTextView = BaseTodoDate()
+    
+    var presenter: EditTodoPresenterProtocol?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTitleTextView()
+        setupDescriptionTextView()
+        setupDateTextView()
+        setupLayout()
+        
+        navigationItem.largeTitleDisplayMode = .never
+        
+        //debugging data
+        titleTextView.text = "TITLE"
+        descriptionTextView.text = "Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике."
+        dateTextView.text = "03/03/25"
+    }
+}
+
+// MARK: - Private methods
+extension EditTodoViewController {
+    private func setupTitleTextView() {
+        titleTextView.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        titleTextView.setLetterSpacing(0.4)
+        setHeight(for: titleTextView)
+    }
+    
+    private func setupDescriptionTextView() {
+        descriptionTextView.font = UIFont.systemFont(ofSize: 16)
+    }
+    
+    private func setupDateTextView() {
+        setHeight(for: dateTextView)
+    }
+    
+    private func setHeight(for textView: UITextView) {
+        let newSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        textView.heightAnchor.constraint(equalToConstant: newSize.height).isActive = true
+    }
+    
+    private func setupLayout() {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        
+        stackView.addArrangedSubview(titleTextView)
+        stackView.addArrangedSubview(dateTextView)
+        stackView.addArrangedSubview(descriptionTextView)
+       
+        view.addSubview(stackView)
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:12),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+        ])
+    }
+}
+
+extension EditTodoViewController: EditTodoViewProtocol {
+    func displayTodo() {
+        
+    }
+}

@@ -17,7 +17,7 @@ protocol ToDoListPresenterOutputProtocol: AnyObject {
     func showShareActionAlert()
 }
 
-class ToDoTableViewCell: UITableViewCell {
+final class ToDoTableViewCell: UITableViewCell {
     private let isCompletedIconColor = UIColor(hex: "#FED702")
     private let isNotCompletedIconColor = UIColor(hex: "#4D555E")
     private let isCompletedImage = UIImage(systemName: "checkmark.circle")
@@ -27,9 +27,9 @@ class ToDoTableViewCell: UITableViewCell {
     private let iconSize = 24
     
     private var isCompletedButton: UIButton!
-    private var titleTextView: UITextView!
-    private var descriptionTextView: UITextView!
-    private var dateTextView: UITextView!
+    private var titleTextView = BaseTodoTitle()
+    private var descriptionTextView = BaseTodoDescription()
+    private var dateTextView = BaseTodoDate()
     
     private var onEdit: (() -> Void)?
     private var onShare: (() -> Void)?
@@ -40,12 +40,8 @@ class ToDoTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        setupIsCompletedButton()
-        setupTitleTextView()
-        setupDescriptionTextView()
-        setupDateTextField()
         
+        setupIsCompletedButton()
         setupLayout()
         
         let menu = UIContextMenuInteraction(delegate: self)
@@ -128,45 +124,6 @@ extension ToDoTableViewCell {
         contentView.addSubview(isCompletedButton)
     }
     
-    private func setupTitleTextView(){
-        titleTextView = UITextView()
-        titleTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        titleTextView.isEditable = false
-        titleTextView.isScrollEnabled = false
-        titleTextView.setLetterSpacing(-0.43)
-        
-        titleTextView.textContainerInset = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
-        contentView.addSubview(titleTextView)
-    }
-    
-    private func setupDescriptionTextView() {
-        descriptionTextView = UITextView()
-        
-        descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
-        descriptionTextView.isEditable = false
-        descriptionTextView.isScrollEnabled = false
-        descriptionTextView.font = UIFont.systemFont(ofSize: 12)
-        descriptionTextView.textColor = textColor
-        
-        descriptionTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        contentView.addSubview(descriptionTextView)
-    }
-    
-    private func setupDateTextField () {
-        dateTextView = UITextView()
-        dateTextView.translatesAutoresizingMaskIntoConstraints = false
-        dateTextView.isEditable = false
-        dateTextView.isScrollEnabled = false
-
-        dateTextView.font = UIFont.systemFont(ofSize: 12)
-        dateTextView.textColor = textColor
-        dateTextView.alpha = 0.5
-        
-        dateTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        contentView.addSubview(dateTextView)
-    }
-    
     private func setupLayout() {
         
         let subStackView = UIStackView()
@@ -210,7 +167,7 @@ extension ToDoTableViewCell: UIContextMenuInteractionDelegate {
         _ interaction: UIContextMenuInteraction,
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
-            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
              
                 let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in
                     self.onEdit?()

@@ -21,6 +21,7 @@ final class ToDoListViewController: UIViewController {
     private let searchCancelButtonColor = UIColor(hex: "#272729")
     private let footerButtonColor = UIColor(hex: "#FED702")
     private let alertButtonColor = UIColor(hex: "#FED702")
+    private let navigationBarTintColor = UIColor(hex: "#FED702")
     private var tableView: UITableView!
     private var toolBar = UIToolbar()
     private let footerLabel = UILabel()
@@ -31,6 +32,9 @@ final class ToDoListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         presenter?.fetchData()
+        
+        navigationItem.backButtonTitle = "Назад"
+        navigationController?.navigationBar.tintColor = navigationBarTintColor
     }
     
     @objc private func addTapped() {

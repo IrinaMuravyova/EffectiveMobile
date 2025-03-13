@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+protocol EditTodoRouterProtocol: AnyObject {
+   
+}
+
+class EditTodoRouter {
+    weak var view: EditTodoViewProtocol?
+}
+
+extension EditTodoRouter: EditTodoRouterProtocol {
+   
+}
