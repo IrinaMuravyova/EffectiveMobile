@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ToDoListRouterProtocol: AnyObject {
-    func navigateToEditTodo(with: UUID)
+    func navigateToEditTodo(with todo: ToDo)
 }
 
 class ToDoListRouter {
@@ -16,14 +16,14 @@ class ToDoListRouter {
 }
 
 extension ToDoListRouter: ToDoListRouterProtocol {
-    func navigateToEditTodo(with: UUID) {
+    func navigateToEditTodo(with todo: ToDo) {
         
         guard let view = view else {
             print("ToDoListViewController is nil")
             return
         }
        
-        let editTodoViewController = EditTodoModuleConfigurator.configure()
+        let editTodoViewController = EditTodoModuleConfigurator.configure(with: todo)
         view.navigationController?.pushViewController(editTodoViewController, animated: true)
     }
 }

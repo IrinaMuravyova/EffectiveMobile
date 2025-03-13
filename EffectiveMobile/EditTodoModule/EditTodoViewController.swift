@@ -8,7 +8,7 @@
 import UIKit
 
 protocol EditTodoViewProtocol: AnyObject {
-    func displayTodo()
+    func displayTodo(with todo: ToDo)
 }
 
 class EditTodoViewController: UIViewController {
@@ -26,11 +26,7 @@ class EditTodoViewController: UIViewController {
         setupLayout()
         
         navigationItem.largeTitleDisplayMode = .never
-        
-        //debugging data
-        titleTextView.text = "TITLE"
-        descriptionTextView.text = "Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике."
-        dateTextView.text = "03/03/25"
+        presenter?.viewDidLoad()
     }
 }
 
@@ -39,20 +35,19 @@ extension EditTodoViewController {
     private func setupTitleTextView() {
         titleTextView.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         titleTextView.setLetterSpacing(0.4)
-        setHeight(for: titleTextView)
+        
+        titleTextView.setContentHuggingPriority(.required, for: .vertical)
+        titleTextView.setContentCompressionResistancePriority(.required, for: .vertical)
     }
     
     private func setupDescriptionTextView() {
         descriptionTextView.font = UIFont.systemFont(ofSize: 16)
+        descriptionTextView.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
     
     private func setupDateTextView() {
-        setHeight(for: dateTextView)
-    }
-    
-    private func setHeight(for textView: UITextView) {
-        let newSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-        textView.heightAnchor.constraint(equalToConstant: newSize.height).isActive = true
+        dateTextView.setContentHuggingPriority(.required, for: .vertical)
+        dateTextView.setContentCompressionResistancePriority(.required, for: .vertical)
     }
     
     private func setupLayout() {
@@ -80,7 +75,9 @@ extension EditTodoViewController {
 }
 
 extension EditTodoViewController: EditTodoViewProtocol {
-    func displayTodo() {
-        
+    func displayTodo(with todo: ToDo) {
+        titleTextView.text = todo.title
+        descriptionTextView.text = todo.description
+        dateTextView.text = todo.date
     }
 }

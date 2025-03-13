@@ -8,7 +8,8 @@
 import Foundation
 
 protocol EditTodoPresenterProtocol: AnyObject {
-    func setTodo()
+    func setTodo(with todo: ToDo)
+    func viewDidLoad() 
 }
 
 protocol EditTodoInteractorOutputProtocol: AnyObject {
@@ -19,11 +20,21 @@ class EditTodoPresenter {
     weak var view: EditTodoViewProtocol?
     var interactor: EditTodoInteractorProtocol?
     var router: EditTodoRouterProtocol?
+    
+    var todo: ToDo?
+    
+    
 }
 
 extension EditTodoPresenter: EditTodoPresenterProtocol {
-    func setTodo() {
-        view?.displayTodo()
+    func setTodo(with todo: ToDo) {
+        self.todo = todo
+    }
+    
+    func viewDidLoad() {
+        if let todo = todo {
+            view?.displayTodo(with: todo)
+        }
     }
 }
 

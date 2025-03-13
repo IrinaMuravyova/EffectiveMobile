@@ -82,7 +82,7 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         cell.configure(
             with: todo,
             onEdit: { [weak self] in
-                self?.router?.navigateToEditTodo(with: todo.id)
+                self?.router?.navigateToEditTodo(with: todo)
             },
             onShare: { [weak self] in
                 DispatchQueue.main.async { [weak self] in

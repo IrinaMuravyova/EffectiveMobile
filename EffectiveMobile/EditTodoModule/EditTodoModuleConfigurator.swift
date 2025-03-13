@@ -8,7 +8,7 @@
 import UIKit
 
 final class EditTodoModuleConfigurator {
-    static func configure() -> UIViewController {
+    static func configure(with todo: ToDo) -> UIViewController {
         let view = EditTodoViewController()
         let presenter = EditTodoPresenter()
         let interactor = EditTodoInteractor()
@@ -26,7 +26,7 @@ final class EditTodoModuleConfigurator {
         interactor.repository = repository
         router.view = view
         
-        presenter.setTodo()
+        interactor.setTodo(with: todo)
         
         return view
     }
