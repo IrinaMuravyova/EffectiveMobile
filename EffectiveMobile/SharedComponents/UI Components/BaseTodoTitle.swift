@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseTodoTitle: UITextView {
+class BaseTodoTitle: PlaceholderTextView {
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setupTitleTextView()

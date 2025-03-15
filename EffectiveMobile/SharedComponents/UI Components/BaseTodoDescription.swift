@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseTodoDescription: UITextView {
+class BaseTodoDescription: PlaceholderTextView {
     private let figmaColor = UIColor(hex: "#F4F4F4")
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {

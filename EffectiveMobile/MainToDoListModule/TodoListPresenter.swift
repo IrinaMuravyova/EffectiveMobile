@@ -1,5 +1,5 @@
 //
-//  ToDoListPresenter.swift
+//  TodoListPresenter.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 10.03.2025.
@@ -7,34 +7,34 @@
 
 import Foundation
 
-protocol ToDoListPresenterProtocol: AnyObject {
+protocol TodoListPresenterProtocol: AnyObject {
     func updateSearchResult(with query: String)
     func completeButtonTapped(for id: UUID, at index: IndexPath)
     func createToDo()
     func fetchData()
-    func configure(cell: ToDoTableViewCell, at index: IndexPath)
+    func configure(cell: TodoTableViewCell, at index: IndexPath)
     func getTodosCount() -> Int
     func getTodosCountString() -> String
     func clearSearchResult()
 }
 
-protocol ToDoListPresenterOutputProtocol: AnyObject {
+protocol TodoListPresenterOutputProtocol: AnyObject {
     func showShareActionAlert()
 }
 
-class ToDoListPresenter {
-    private var todos: [ToDo] = []
-    private var todosBeforeFiltering: [ToDo] = []
+final class TodoListPresenter {
+    private var todos: [Todo] = []
+    private var todosBeforeFiltering: [Todo] = []
     var todosCount: Int {
             return todos.count
         }
     
-    weak var view: ToDoListViewProtocol?
-    var interactor: ToDoListInteractorProtocol?
-    var router: ToDoListRouterProtocol?
+    weak var view: TodoListViewProtocol?
+    var interactor: TodoListInteractorProtocol?
+    var router: TodoListRouterProtocol?
 }
 
-extension ToDoListPresenter: ToDoListPresenterProtocol {
+extension TodoListPresenter: TodoListPresenterProtocol {
     func updateSearchResult(with query: String) {
         todos = todosBeforeFiltering
         
@@ -69,14 +69,14 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
     }
     
     func createToDo() {
-        // TODO: add create todo logic
+        router?.navigateToCreateTodo()
     }
 
     func fetchData() {
         interactor?.fetchData()
     }
     
-    func configure(cell: ToDoTableViewCell, at index: IndexPath) {
+    func configure(cell: TodoTableViewCell, at index: IndexPath) {
         let todo = todos[index.row]
         cell.configure(
             with: todo,
@@ -118,8 +118,8 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
     }
 }
 
-extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
-    func didLoadToDoList(_ todos: [ToDo]) {
+extension TodoListPresenter: TodoListInteractorOutputProtocol {
+    func didLoadToDoList(_ todos: [Todo]) {
         self.todos = todos
         viewReload()
     }
@@ -134,7 +134,7 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
         interactor?.getData()
     }
     
-    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo) {
+    func updateTodoCell(at indexPath: IndexPath, with todo: Todo) {
         updateLocalTodoProperties(with: todo)
         DispatchQueue.main.async {
             self.view?.reloadCell(with: indexPath)
@@ -143,7 +143,7 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
 }
 
 // MARK: - Private methods
-extension ToDoListPresenter {
+extension TodoListPresenter {
     private func pluralizeTask(count: Int) -> String {
         let remainder10 = count % 10
         let remainder100 = count % 100
@@ -160,7 +160,7 @@ extension ToDoListPresenter {
         return "\(count) \(word)"
     }
     
-    private func didFilteredToDoList(_ filteredTodos: [ToDo]) {
+    private func didFilteredToDoList(_ filteredTodos: [Todo]) {
         todosBeforeFiltering = self.todos
         self.todos = filteredTodos
         viewReload()
@@ -171,7 +171,7 @@ extension ToDoListPresenter {
         view?.updateFooter()
     }
     
-    private func updateLocalTodoProperties(with todo: ToDo) {
+    private func updateLocalTodoProperties(with todo: Todo) {
         if let index = todos.firstIndex(where: { $0.id == todo.id }) {
             todos[index].title = todo.title
             todos[index].date = todo.date

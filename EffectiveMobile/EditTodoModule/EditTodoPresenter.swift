@@ -18,12 +18,12 @@ protocol EditTodoPresenterProtocol: AnyObject {
     )
 }
 
-class EditTodoPresenter {
+final class EditTodoPresenter {
     weak var view: EditTodoViewProtocol?
     var interactor: EditTodoInteractorProtocol?
     var router: EditTodoRouterProtocol?
     
-    var todo: ToDo?
+    var todo: Todo?
     var indexPath: IndexPath?
 }
 
@@ -39,13 +39,13 @@ extension EditTodoPresenter: EditTodoPresenterProtocol {
         dateString: String,
         description: String
     ) {
-        guard !title.isEmpty else {
-            view?.showAlert(message: "Название не может быть пустым")
+        guard TodoValidator.validateTitle(title) else {
+            view?.showAlertFor(message: "Название не может быть пустым")
             return
         }
   
-        guard Date.fromString(dateString) != nil else {
-            view?.showAlert(message: "Некорректный формат даты. Укажите дату в формате: 03/03/25")
+        guard TodoValidator.validateDate(dateString) else {
+            view?.showAlertFor(message: "Некорректный формат даты. Укажите дату в формате: 03/03/25")
             return
         }
         
@@ -71,7 +71,7 @@ extension EditTodoPresenter: EditTodoInteractorOutputProtocol {
         }
     }
     
-    func setTodo(with todo: ToDo, at indexPath: IndexPath) {
+    func setTodo(with todo: Todo, at indexPath: IndexPath) {
         self.todo = todo
         self.indexPath = indexPath
     }

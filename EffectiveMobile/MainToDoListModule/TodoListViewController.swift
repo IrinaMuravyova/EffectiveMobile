@@ -1,5 +1,5 @@
 //
-//  ToDoListViewController.swift
+//  TodoListViewController.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 10.03.2025.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ToDoListViewProtocol: AnyObject {
+protocol TodoListViewProtocol: AnyObject {
     func updateFooter()
     func reloadTableView()
     func showShareActionAlert()
@@ -15,7 +15,7 @@ protocol ToDoListViewProtocol: AnyObject {
     func reloadCell(with indexPath: IndexPath)
 }
 
-final class ToDoListViewController: UIViewController {
+final class TodoListViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     private let searchControllerBackgroundColor = UIColor(hex: "#272729")
     private let footerColor = UIColor(hex: "#272729")
@@ -26,7 +26,7 @@ final class ToDoListViewController: UIViewController {
     private var toolBar = UIToolbar()
     private let footerLabel = UILabel()
     
-    var presenter: ToDoListPresenterProtocol?
+    var presenter: TodoListPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ final class ToDoListViewController: UIViewController {
 }
 
 // MARK: - Private methods
-extension ToDoListViewController {
+extension TodoListViewController {
     private func setupUI() {
         setupTitle()
         setupSearchController()
@@ -89,7 +89,7 @@ extension ToDoListViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: "ToDoCell")
+        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: "ToDoCell")
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -138,7 +138,7 @@ extension ToDoListViewController {
 }
 
 // MARK: - ToDoListViewProtocol
-extension ToDoListViewController: ToDoListViewProtocol {
+extension TodoListViewController: TodoListViewProtocol {
     func reloadTableView() {
         tableView.reloadData()
     }
@@ -171,7 +171,7 @@ extension ToDoListViewController: ToDoListViewProtocol {
 }
 
 
-extension ToDoListViewController: UISearchResultsUpdating, UISearchBarDelegate {
+extension TodoListViewController: UISearchResultsUpdating, UISearchBarDelegate {
     // MARK: - UISearchResultsUpdating
     func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text ?? ""
@@ -184,13 +184,13 @@ extension ToDoListViewController: UISearchResultsUpdating, UISearchBarDelegate {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
+extension TodoListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter?.getTodosCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? ToDoTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? TodoTableViewCell else { return UITableViewCell() }
         cell.presenter = presenter
         presenter?.configure(cell: cell, at: indexPath)
         return cell

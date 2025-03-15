@@ -8,14 +8,15 @@
 import Foundation
 
 protocol RepositoryProtocol {
-    func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
-    func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
+    func fetchToDos(completion: @escaping (Result<[Todo], Error>) -> Void)
+    func getToDos(completion: @escaping (Result<[Todo], Error>) -> Void)
     func deleteTodo(with: UUID, completion: @escaping (Result<UUID, Error>) -> Void)
     func changeTodoComplete(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void)
-    func updateTodo(for todo: ToDo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func updateTodo(for todo: Todo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func createTodo(title: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-class Repository: RepositoryProtocol {
+final class Repository: RepositoryProtocol {
     private let networkManager: NetworkManagerProtocol
     private let dataManager: CoreDataManagerProtocol
     private let userDefaults: UserDefaults
@@ -31,7 +32,7 @@ class Repository: RepositoryProtocol {
         self.userDefaults = userDefaults
     }
     
-    func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+    func fetchToDos(completion: @escaping (Result<[Todo], Error>) -> Void) {
         
         DispatchQueue.global(qos: .background).async {
 //            UserDefaults.standard.set(true, forKey: "isFirstLaunch") // debugging code
@@ -59,7 +60,7 @@ class Repository: RepositoryProtocol {
         }
     }
     
-    func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+    func getToDos(completion: @escaping (Result<[Todo], Error>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             self.loadLocalToDos(completion: completion)
         }
@@ -85,7 +86,7 @@ class Repository: RepositoryProtocol {
         }
     }
     
-    func updateTodo(for todo: ToDo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func updateTodo(for todo: Todo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let updatedTodo = todo
         updatedTodo.title = withTitle
         updatedTodo.date = date
@@ -101,11 +102,30 @@ class Repository: RepositoryProtocol {
             }
         }
     }
+    
+    func createTodo(title: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let newToDo = Todo(
+            id: UUID(),
+            title: title,
+            description: description,
+            date: date,
+            isCompleted: false
+        )
+        
+        dataManager.createToDo(with: newToDo) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
 // MARK:- Private methods
 extension Repository {
-    private func loadLocalToDos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+    private func loadLocalToDos(completion: @escaping (Result<[Todo], Error>) -> Void) {
         self.dataManager.getTodos { localTodosResult in
             switch localTodosResult {
             case .success(let localTodos):

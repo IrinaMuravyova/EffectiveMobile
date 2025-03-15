@@ -1,5 +1,5 @@
 //
-//  ToDoListInteractor.swift
+//  TodoListInteractor.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 10.03.2025.
@@ -7,27 +7,27 @@
 
 import Foundation
 
-protocol ToDoListInteractorProtocol: AnyObject {
+protocol TodoListInteractorProtocol: AnyObject {
     func fetchData()
     func getData()
     func deleteTodo(with id: UUID)
     func markTodoCompleted(for id: UUID, with state: Bool)
-    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo)
+    func updateTodoCell(at indexPath: IndexPath, with todo: Todo)
 }
 
-protocol ToDoListInteractorOutputProtocol: AnyObject {
-    func didLoadToDoList(_ todos: [ToDo])
+protocol TodoListInteractorOutputProtocol: AnyObject {
+    func didLoadToDoList(_ todos: [Todo])
     func setFilteredTodos()
     func todoDidDeleted(with id: UUID)
-    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo)
+    func updateTodoCell(at indexPath: IndexPath, with todo: Todo)
 }
 
-class ToDoListInteractor {
-    weak var presenter: ToDoListInteractorOutputProtocol?
+final class TodoListInteractor {
+    weak var presenter: TodoListInteractorOutputProtocol?
     var repository: RepositoryProtocol?
 }
 
-extension ToDoListInteractor: ToDoListInteractorProtocol {
+extension TodoListInteractor: TodoListInteractorProtocol {
     func fetchData() {
         DispatchQueue.global(qos: .background).async {
             self.repository?.fetchToDos { result in
@@ -75,7 +75,7 @@ extension ToDoListInteractor: ToDoListInteractorProtocol {
         repository?.changeTodoComplete(for: id, with: state) { _ in }
     }
     
-    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo) {
+    func updateTodoCell(at indexPath: IndexPath, with todo: Todo) {
         presenter?.updateTodoCell(at: indexPath, with: todo)
         
     }

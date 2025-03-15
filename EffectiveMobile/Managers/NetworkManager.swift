@@ -8,10 +8,10 @@
 import Foundation
 
 protocol NetworkManagerProtocol {
-    func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
+    func fetchToDos(completion: @escaping (Result<[Todo], Error>) -> Void)
 }
 
-class NetworkManager: NetworkManagerProtocol {
+final class NetworkManager: NetworkManagerProtocol {
     static let shared = NetworkManager()
     private let urlString = "https://dummyjson.com/todos/"
     
@@ -21,7 +21,7 @@ class NetworkManager: NetworkManagerProtocol {
         return uuid
     }
     
-    func fetchToDos(completion: @escaping (Result<[ToDo], any Error>) -> Void) {
+    func fetchToDos(completion: @escaping (Result<[Todo], any Error>) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0)))
             return
@@ -41,7 +41,7 @@ class NetworkManager: NetworkManagerProtocol {
             do {
                 let decodedResponse = try JSONDecoder().decode(ToDoAPIResponse.self, from: data)
                 let todos = decodedResponse.todos.map { todo in
-                    ToDo(
+                    Todo(
                         id: self.intToUUID(todo.id),
                         title: todo.todo,
                         description: "",

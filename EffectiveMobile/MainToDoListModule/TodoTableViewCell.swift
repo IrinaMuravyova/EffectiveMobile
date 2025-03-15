@@ -1,5 +1,5 @@
 //
-//  ToDoTableViewCell.swift
+//  TodoTableViewCell.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 10.03.2025.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol ToDoTableViewCellProtocol: AnyObject {
-    func configure(with todo: ToDo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void, onMarkCompleted: @escaping () -> Void)
-    func isCompletedConfigure(with todo: ToDo)
-    func isNotCompletedConfigure(with todo: ToDo)
+protocol TodoTableViewCellProtocol: AnyObject {
+    func configure(with todo: Todo, onEdit: @escaping () -> Void, onShare: @escaping () -> Void, onDelete: @escaping () -> Void, onMarkCompleted: @escaping () -> Void)
+    func isCompletedConfigure(with todo: Todo)
+    func isNotCompletedConfigure(with todo: Todo)
 }
 
-final class ToDoTableViewCell: UITableViewCell {
+final class TodoTableViewCell: UITableViewCell {
     private let isCompletedIconColor = UIColor(hex: "#FED702")
     private let isNotCompletedIconColor = UIColor(hex: "#4D555E")
     private let isCompletedImage = UIImage(systemName: "checkmark.circle")
@@ -32,7 +32,7 @@ final class ToDoTableViewCell: UITableViewCell {
     private var onDelete: (() -> Void)?
     private var onMarkCompleted: (() -> Void)?
     
-    var presenter: ToDoListPresenterProtocol?
+    var presenter: TodoListPresenterProtocol?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -53,9 +53,9 @@ final class ToDoTableViewCell: UITableViewCell {
     }
 }
 
-extension ToDoTableViewCell: ToDoTableViewCellProtocol {
+extension TodoTableViewCell: TodoTableViewCellProtocol {
     func configure(
-        with todo: ToDo,
+        with todo: Todo,
         onEdit: @escaping () -> Void,
         onShare: @escaping () -> Void,
         onDelete: @escaping () -> Void,
@@ -73,7 +73,7 @@ extension ToDoTableViewCell: ToDoTableViewCellProtocol {
         }
     }
     
-    func isNotCompletedConfigure(with todo: ToDo) {
+    func isNotCompletedConfigure(with todo: Todo) {
         isCompletedButton.setImage(isNotCompletedImage, for: .normal)
         isCompletedButton.tintColor = isNotCompletedIconColor
        
@@ -88,7 +88,7 @@ extension ToDoTableViewCell: ToDoTableViewCellProtocol {
         descriptionTextView.alpha = 1
     }
     
-    func isCompletedConfigure(with todo: ToDo) {
+    func isCompletedConfigure(with todo: Todo) {
         isCompletedButton.setImage(isCompletedImage, for: .normal)
         isCompletedButton.tintColor = isCompletedIconColor
         
@@ -107,7 +107,7 @@ extension ToDoTableViewCell: ToDoTableViewCellProtocol {
 }
 
 // MARK: - Private methods
-extension ToDoTableViewCell {
+extension TodoTableViewCell {
     private func setupIsCompletedButton() {
         isCompletedButton = UIButton()
         
@@ -158,7 +158,7 @@ extension ToDoTableViewCell {
     }
 }
 
-extension ToDoTableViewCell: UIContextMenuInteractionDelegate {
+extension TodoTableViewCell: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(
         _ interaction: UIContextMenuInteraction,
         configurationForMenuAtLocation location: CGPoint

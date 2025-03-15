@@ -1,5 +1,5 @@
 //
-//  ToDoListModuleConfigurator.swift
+//  TodoListModuleConfigurator.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 10.03.2025.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class ToDoListModuleConfigurator {
+final class TodoListModuleConfigurator {
     static func configure() -> UIViewController {
-        let view = ToDoListViewController()
-        let presenter = ToDoListPresenter()
-        let interactor = ToDoListInteractor()
-        let router = ToDoListRouter()
+        let view = TodoListViewController()
+        let presenter = TodoListPresenter()
+        let interactor = TodoListInteractor()
+        let router = TodoListRouter()
         
         let networkManager = NetworkManager()
         let coreDataManager = CoreDataManager.shared
@@ -29,6 +29,9 @@ final class ToDoListModuleConfigurator {
         
         let editTodoRouter = EditTodoRouter()
         editTodoRouter.delegate = router
+        
+        let createTodoRouter = CreateTodoRouter()
+        createTodoRouter.delegate = router
         
         return view
     }

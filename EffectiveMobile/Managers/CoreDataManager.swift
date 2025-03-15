@@ -8,15 +8,15 @@
 import CoreData
 
 protocol CoreDataManagerProtocol: AnyObject {
-    func getTodos(completion: @escaping (Result<[ToDo], Error>) -> Void)
-    func update(_ todos: [ToDo], completion: @escaping (Result<Void, Error>) -> Void)
+    func getTodos(completion: @escaping (Result<[Todo], Error>) -> Void)
+    func update(_ todos: [Todo], completion: @escaping (Result<Void, Error>) -> Void)
     func deleteToDo(with id: UUID, completion: @escaping (Result<Void, Error>) -> Void)
-    func createToDo(with toDo: ToDo, completion: @escaping (Result<Void, Error>) -> Void)
-    func updateToDo(_ toDo: ToDo, completion: @escaping (Result<Void, any Error>) -> Void)
+    func createToDo(with toDo: Todo, completion: @escaping (Result<Void, Error>) -> Void)
+    func updateToDo(_ toDo: Todo, completion: @escaping (Result<Void, any Error>) -> Void)
     func changeCompletionState(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-class CoreDataManager {
+final class CoreDataManager {
     static let shared = CoreDataManager()
     private let persistentContainer: NSPersistentContainer
     private let backgroundContext: NSManagedObjectContext
@@ -101,7 +101,7 @@ extension CoreDataManager {
 // MARK: - CoreDataManagerProtocol
 extension CoreDataManager: CoreDataManagerProtocol {
     
-    func getTodos(completion: @escaping (Result<[ToDo], Error>) -> Void) {
+    func getTodos(completion: @escaping (Result<[Todo], Error>) -> Void) {
         backgroundContext.perform { [weak self] in
             guard let self = self else { return }
             
@@ -110,7 +110,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
             do {
                 let toDoCDs = try self.backgroundContext.fetch(fetchRequest)
                 let todos = toDoCDs.compactMap {
-                        ToDo(from: $0)
+                        Todo(from: $0)
                     }
                 completion(.success(todos))
             } catch {
@@ -120,7 +120,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func update(_ todos: [ToDo], completion: @escaping (Result<Void, Error>) -> Void) {
+    func update(_ todos: [Todo], completion: @escaping (Result<Void, Error>) -> Void) {
         backgroundContext.perform {[weak self] in
             guard let self = self else { return }
           
@@ -156,7 +156,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func createToDo(with toDo: ToDo, completion: @escaping (Result<Void, Error>) -> Void) {
+    func createToDo(with toDo: Todo, completion: @escaping (Result<Void, Error>) -> Void) {
         backgroundContext.perform { [weak self] in
             guard let self = self else { return }
 
@@ -171,7 +171,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func updateToDo(_ toDo: ToDo, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func updateToDo(_ toDo: Todo, completion: @escaping (Result<Void, any Error>) -> Void) {
         backgroundContext.perform { [weak self] in
             guard let self = self else { return }
                         

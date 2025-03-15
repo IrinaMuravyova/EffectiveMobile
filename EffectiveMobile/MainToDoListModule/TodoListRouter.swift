@@ -1,5 +1,5 @@
 //
-//  ToDoListRouter.swift
+//  TodoListRouter.swift
 //  EffectiveMobile
 //
 //  Created by Irina Muravyeva on 10.03.2025.
@@ -7,20 +7,22 @@
 
 import Foundation
 
-protocol ToDoListRouterProtocol: AnyObject {
-    func navigateToEditTodo(with todo: ToDo, at indexPath: IndexPath)
+protocol TodoListRouterProtocol: AnyObject {
+    func navigateToEditTodo(with todo: Todo, at indexPath: IndexPath)
+    func navigateToCreateTodo()
 }
-class ToDoListRouter {
-    weak var view: ToDoListViewController?
-    weak var interactor: ToDoListInteractorProtocol?
+
+final class TodoListRouter {
+    weak var view: TodoListViewController?
+    weak var interactor: TodoListInteractorProtocol?
     
 }
 
-extension ToDoListRouter: ToDoListRouterProtocol {
-    func navigateToEditTodo(with todo: ToDo, at indexPath: IndexPath) {
+extension TodoListRouter: TodoListRouterProtocol {
+    func navigateToEditTodo(with todo: Todo, at indexPath: IndexPath) {
         
         guard let view = view else {
-            print("ToDoListViewController is nil")
+            print("TodoListViewController is nil")
             return
         }
        
@@ -30,14 +32,35 @@ extension ToDoListRouter: ToDoListRouterProtocol {
            }
         view.navigationController?.pushViewController(editTodoViewController, animated: true)
     }
+    
+    func navigateToCreateTodo() {
+        guard let view = view else {
+            print("TodoListViewController is nil")
+            return
+        }
+       
+        let createTodoViewController = CreateTodoModuleConfigurator.configure()
+        if let createTodoRouter = (createTodoViewController as? CreateTodoViewController)?.presenter?.router {
+            createTodoRouter.delegate = self
+           }
+
+        createTodoViewController.modalPresentationStyle = .fullScreen
+        view.navigationController?.present(createTodoViewController, animated: true)
+    }
 }
 
-extension ToDoListRouter: EditTodoRouterDelegate {
+extension TodoListRouter: EditTodoRouterDelegate {
     func didUpdateTodo() {
         interactor?.getData()
     }
     
-    func didUpdateTodo(with indexPath: IndexPath, todo: ToDo) {
+    func didUpdateTodo(with indexPath: IndexPath, todo: Todo) {
         interactor?.updateTodoCell(at: indexPath, with: todo)
+    }
+}
+
+extension TodoListRouter: CreateTodoRouterDelegate {
+    func todoDidCreated() {
+        interactor?.getData()
     }
 }

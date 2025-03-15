@@ -10,15 +10,15 @@ import UIKit
 protocol EditTodoRouterProtocol: AnyObject {
     var delegate: EditTodoRouterDelegate? { get set }
     func dismiss()
-    func dismiss(with indexPath: IndexPath, todo: ToDo)
+    func dismiss(with indexPath: IndexPath, todo: Todo)
 }
 
 protocol EditTodoRouterDelegate: AnyObject {
     func didUpdateTodo()
-    func didUpdateTodo(with indexPath: IndexPath, todo: ToDo)
+    func didUpdateTodo(with indexPath: IndexPath, todo: Todo)
 }
 
-class EditTodoRouter {
+final class EditTodoRouter {
     weak var view: UIViewController?
     weak var delegate: EditTodoRouterDelegate?
 }
@@ -32,7 +32,7 @@ extension EditTodoRouter: EditTodoRouterProtocol {
         }
     }
     
-    func dismiss(with indexPath: IndexPath, todo: ToDo) {
+    func dismiss(with indexPath: IndexPath, todo: Todo) {
         self.delegate?.didUpdateTodo(with: indexPath, todo: todo)
         DispatchQueue.main.async {
             self.view?.navigationController?.popViewController(animated: true)

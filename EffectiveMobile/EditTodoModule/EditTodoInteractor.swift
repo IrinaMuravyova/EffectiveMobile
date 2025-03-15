@@ -8,20 +8,20 @@
 import Foundation
 
 protocol EditTodoInteractorProtocol: AnyObject {
-    func updateTodo(for todo: ToDo, withTitle: String, dateString: String, description: String)
+    func updateTodo(for todo: Todo, withTitle: String, dateString: String, description: String)
 }
 
 protocol EditTodoInteractorOutputProtocol: AnyObject {
     func todoDidUpdated()
 }
 
-class EditTodoInteractor {
+final class EditTodoInteractor {
     weak var presenter: EditTodoInteractorOutputProtocol?
     var repository: RepositoryProtocol?
 }
 
 extension EditTodoInteractor: EditTodoInteractorProtocol {
-    func updateTodo(for todo: ToDo, withTitle: String, dateString: String, description: String) {
+    func updateTodo(for todo: Todo, withTitle: String, dateString: String, description: String) {
         repository?.updateTodo(for: todo, withTitle: withTitle, date: dateString, description: description) { result in
             switch result {
             case .success:
