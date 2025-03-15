@@ -12,10 +12,14 @@ protocol ToDoListInteractorProtocol: AnyObject {
     func getData()
     func deleteTodo(with id: UUID)
     func markTodoCompleted(for id: UUID, with state: Bool)
+    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo)
 }
 
-protocol ToDoListRepositoryOutputProtocol: AnyObject {
+protocol ToDoListInteractorOutputProtocol: AnyObject {
+    func didLoadToDoList(_ todos: [ToDo])
+    func setFilteredTodos()
     func todoDidDeleted(with id: UUID)
+    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo)
 }
 
 class ToDoListInteractor {
@@ -56,17 +60,23 @@ extension ToDoListInteractor: ToDoListInteractorProtocol {
     }
     
     func deleteTodo(with id: UUID) {
-        self.repository?.deleteTodo(with: id)
-        self.todoDidDeleted(with: id)
+        self.repository?.deleteTodo(with: id) { [weak self] result in
+            switch result {
+            case .success(let deletedId):
+                self?.presenter?.todoDidDeleted(with: deletedId)
+            case .failure:
+                print("Failed to delete task")
+            }
+                
+        }
     }
     
     func markTodoCompleted(for id: UUID, with state: Bool){
         repository?.changeTodoComplete(for: id, with: state) { _ in }
     }
-}
-
-extension ToDoListInteractor: ToDoListRepositoryOutputProtocol {
-    func todoDidDeleted(with id: UUID) {
-        presenter?.todoDidDeleted(with: id)
+    
+    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo) {
+        presenter?.updateTodoCell(at: indexPath, with: todo)
+        
     }
 }

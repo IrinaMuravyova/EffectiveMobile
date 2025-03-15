@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ToDo {
+class ToDo {
     let id: UUID
     var title: String
     var description: String

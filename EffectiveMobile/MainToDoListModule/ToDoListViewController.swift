@@ -12,6 +12,7 @@ protocol ToDoListViewProtocol: AnyObject {
     func reloadTableView()
     func showShareActionAlert()
     func updateTodoStatus(for id: UUID, at index: IndexPath)
+    func reloadCell(with indexPath: IndexPath)
 }
 
 final class ToDoListViewController: UIViewController {
@@ -21,7 +22,6 @@ final class ToDoListViewController: UIViewController {
     private let searchCancelButtonColor = UIColor(hex: "#272729")
     private let footerButtonColor = UIColor(hex: "#FED702")
     private let alertButtonColor = UIColor(hex: "#FED702")
-    private let navigationBarTintColor = UIColor(hex: "#FED702")
     private var tableView: UITableView!
     private var toolBar = UIToolbar()
     private let footerLabel = UILabel()
@@ -32,9 +32,6 @@ final class ToDoListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         presenter?.fetchData()
-        
-        navigationItem.backButtonTitle = "Назад"
-        navigationController?.navigationBar.tintColor = navigationBarTintColor
     }
     
     @objc private func addTapped() {
@@ -166,6 +163,10 @@ extension ToDoListViewController: ToDoListViewProtocol {
     
     func updateTodoStatus(for id: UUID, at index: IndexPath) {
         tableView.reloadRows(at: [index], with: .automatic)
+    }
+    
+    func reloadCell(with indexPath: IndexPath) {
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 

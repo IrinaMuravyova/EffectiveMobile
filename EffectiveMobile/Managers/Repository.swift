@@ -10,8 +10,9 @@ import Foundation
 protocol RepositoryProtocol {
     func fetchToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
     func getToDos(completion: @escaping (Result<[ToDo], Error>) -> Void)
-    func deleteTodo(with: UUID)
+    func deleteTodo(with: UUID, completion: @escaping (Result<UUID, Error>) -> Void)
     func changeTodoComplete(for id: UUID, with state: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+    func updateTodo(for todo: ToDo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 class Repository: RepositoryProtocol {
@@ -19,7 +20,6 @@ class Repository: RepositoryProtocol {
     private let dataManager: CoreDataManagerProtocol
     private let userDefaults: UserDefaults
     private let isFirstLaunchKey = "isFirstLaunch"
-    weak var interactor: ToDoListRepositoryOutputProtocol?
     
     init(
         networkManager: NetworkManagerProtocol,
@@ -65,13 +65,13 @@ class Repository: RepositoryProtocol {
         }
     }
     
-    func deleteTodo(with id: UUID) {
-        dataManager.deleteToDo(with: id) { [weak self] result in
+    func deleteTodo(with id: UUID, completion: @escaping (Result<UUID, Error>) -> Void) {
+        dataManager.deleteToDo(with: id) { result in
             switch result {
             case .success:
-                self?.interactor?.todoDidDeleted(with: id)
+                completion(.success(id))
             case .failure(let error):
-                print("Failed to delete task: \(error.localizedDescription)")
+                completion(.failure(error))
             }
         }
     }
@@ -81,6 +81,23 @@ class Repository: RepositoryProtocol {
         dataManager.changeCompletionState(for: id, with: state) { result in
             DispatchQueue.main.async {
                 completion(result)
+            }
+        }
+    }
+    
+    func updateTodo(for todo: ToDo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        var updatedTodo = todo
+        updatedTodo.title = withTitle
+        updatedTodo.date = date
+        updatedTodo.description = description
+        
+        dataManager.updateToDo(updatedTodo) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                print("Error saving to Core Data: \(error.localizedDescription)")
+                completion(.failure(error))
             }
         }
     }

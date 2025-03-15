@@ -9,12 +9,15 @@ import UIKit
 
 protocol EditTodoViewProtocol: AnyObject {
     func displayTodo(with todo: ToDo)
+    func showAlert(message: String)
 }
 
 class EditTodoViewController: UIViewController {
     private var titleTextView = BaseTodoTitle()
     private var descriptionTextView = BaseTodoDescription()
     private var dateTextView = BaseTodoDate()
+    
+    private let navigationBarTintColor = UIColor(hex: "#FED702")
     
     var presenter: EditTodoPresenterProtocol?
     
@@ -24,9 +27,24 @@ class EditTodoViewController: UIViewController {
         setupDescriptionTextView()
         setupDateTextView()
         setupLayout()
+        setupNavigationBar()
+        disableSwipeBackGesture()
         
         navigationItem.largeTitleDisplayMode = .never
         presenter?.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        descriptionTextView.becomeFirstResponder()
+    }
+    
+    @objc private func backButtonTapped() {
+        presenter?.viewDidPressBackButton(
+            title: titleTextView.text ?? "",
+            dateString: dateTextView.text ?? "",
+            description: descriptionTextView.text ?? ""
+        )
     }
 }
 
@@ -38,16 +56,32 @@ extension EditTodoViewController {
         
         titleTextView.setContentHuggingPriority(.required, for: .vertical)
         titleTextView.setContentCompressionResistancePriority(.required, for: .vertical)
+        
+        titleTextView.isEditable = true
+        titleTextView.tintColor = .white
+        
+        titleTextView.returnKeyType = .done
     }
     
     private func setupDescriptionTextView() {
         descriptionTextView.font = UIFont.systemFont(ofSize: 16)
         descriptionTextView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        
+        descriptionTextView.isEditable = true
+        descriptionTextView.tintColor = .white
+        
+        descriptionTextView.returnKeyType = .done
     }
     
     private func setupDateTextView() {
         dateTextView.setContentHuggingPriority(.required, for: .vertical)
         dateTextView.setContentCompressionResistancePriority(.required, for: .vertical)
+        
+        dateTextView.isEditable = true
+        dateTextView.tintColor = .white
+        
+        dateTextView.keyboardType = .numbersAndPunctuation
+        dateTextView.returnKeyType = .done
     }
     
     private func setupLayout() {
@@ -72,6 +106,21 @@ extension EditTodoViewController {
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
+    
+    private func setupNavigationBar() {
+        let backButton = UIBarButtonItem(
+            title: "< Назад",
+            style: .plain,
+            target: self,
+            action: #selector(backButtonTapped)
+        )
+        backButton.tintColor = navigationBarTintColor
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    private func disableSwipeBackGesture() {
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
 }
 
 extension EditTodoViewController: EditTodoViewProtocol {
@@ -79,5 +128,12 @@ extension EditTodoViewController: EditTodoViewProtocol {
         titleTextView.text = todo.title
         descriptionTextView.text = todo.description
         dateTextView.text = todo.date
+    }
+
+    func showAlert(message: String) {
+        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        
+        present(alertController, animated: true)
     }
 }

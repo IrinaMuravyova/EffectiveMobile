@@ -8,24 +8,29 @@
 import Foundation
 
 protocol EditTodoInteractorProtocol: AnyObject {
-    func setTodo(with todo: ToDo)
+    func updateTodo(for todo: ToDo, withTitle: String, dateString: String, description: String)
 }
 
-protocol EditTodoRepositoryOutputProtocol: AnyObject {
-
+protocol EditTodoInteractorOutputProtocol: AnyObject {
+    func todoDidUpdated()
 }
 
 class EditTodoInteractor {
-    weak var presenter: EditTodoPresenterProtocol?
+    weak var presenter: EditTodoInteractorOutputProtocol?
     var repository: RepositoryProtocol?
 }
 
 extension EditTodoInteractor: EditTodoInteractorProtocol {
-    func setTodo(with todo: ToDo) {
-        presenter?.setTodo(with: todo)
+    func updateTodo(for todo: ToDo, withTitle: String, dateString: String, description: String) {
+        repository?.updateTodo(for: todo, withTitle: withTitle, date: dateString, description: description) { result in
+            switch result {
+            case .success:
+                self.presenter?.todoDidUpdated()
+            case .failure(let error):
+                print("Error updating the task: \(error.localizedDescription)")
+            }
+            
+        }
     }
 }
 
-extension EditTodoInteractor: EditTodoRepositoryOutputProtocol {
-
-}

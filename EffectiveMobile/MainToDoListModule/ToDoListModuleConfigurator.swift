@@ -24,7 +24,11 @@ final class ToDoListModuleConfigurator {
         presenter.router = router
         interactor.presenter = presenter
         interactor.repository = repository
+        router.interactor = interactor
         router.view = view
+        
+        let editTodoRouter = EditTodoRouter()
+        editTodoRouter.delegate = router
         
         return view
     }

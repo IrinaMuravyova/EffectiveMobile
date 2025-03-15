@@ -70,13 +70,32 @@ extension CoreDataManager {
                     try self.backgroundContext.save()
                     completion(.success(()))
                 } catch {
+                    print("Failed to save background context: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             } else {
+                print("No changes to save in background context.")
                 completion(.success(()))
             }
         }
     }
+    
+//   private func checkTodoInMainContext(id: UUID) {
+//        mainContext.perform {
+//            let fetchRequest: NSFetchRequest<ToDoCD> = ToDoCD.fetchRequest()
+//            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+//            
+//            do {
+//                if let todo = try self.mainContext.fetch(fetchRequest).first {
+//                    print("Task in main context: \(todo.title ?? "No title")")
+//                } else {
+//                    print("Task not found in main context.")
+//                }
+//            } catch {
+//                print("Failed to fetch task in main context: \(error.localizedDescription)")
+//            }
+//        }
+//    }
 }
 
 // MARK: - CoreDataManagerProtocol
@@ -186,7 +205,16 @@ extension CoreDataManager: CoreDataManagerProtocol {
             do {
                 if let todoToUpdate = try backgroundContext.fetch(fetchRequest).first {
                     todoToUpdate.isCompleted = state
-                    self.saveBackgroundContext(completion: completion)
+//                    self.saveBackgroundContext(completion: completion)
+                    self.saveBackgroundContext { result in
+                        switch result {
+                        case .success:
+//                            self.checkTodoInMainContext(id: id)
+                            completion(.success(()))
+                        case .failure(let error):
+                            completion(.failure(error))
+                        }
+                    }
                 } else {
                     print("Task not found")
                 }

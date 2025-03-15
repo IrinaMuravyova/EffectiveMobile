@@ -13,10 +13,6 @@ protocol ToDoTableViewCellProtocol: AnyObject {
     func isNotCompletedConfigure(with todo: ToDo)
 }
 
-protocol ToDoListPresenterOutputProtocol: AnyObject {
-    func showShareActionAlert()
-}
-
 final class ToDoTableViewCell: UITableViewCell {
     private let isCompletedIconColor = UIColor(hex: "#FED702")
     private let isNotCompletedIconColor = UIColor(hex: "#4D555E")

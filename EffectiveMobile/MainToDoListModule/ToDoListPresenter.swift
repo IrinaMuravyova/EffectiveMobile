@@ -18,10 +18,8 @@ protocol ToDoListPresenterProtocol: AnyObject {
     func clearSearchResult()
 }
 
-protocol ToDoListInteractorOutputProtocol: AnyObject {
-    func didLoadToDoList(_ todos: [ToDo])
-    func setFilteredTodos()
-    func todoDidDeleted(with id: UUID)
+protocol ToDoListPresenterOutputProtocol: AnyObject {
+    func showShareActionAlert()
 }
 
 class ToDoListPresenter {
@@ -82,7 +80,7 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         cell.configure(
             with: todo,
             onEdit: { [weak self] in
-                self?.router?.navigateToEditTodo(with: todo)
+                self?.router?.navigateToEditTodo(with: todo, at: index)
             },
             onShare: { [weak self] in
                 DispatchQueue.main.async { [weak self] in
@@ -134,6 +132,13 @@ extension ToDoListPresenter: ToDoListInteractorOutputProtocol {
         viewReload()
         interactor?.getData()
     }
+    
+    func updateTodoCell(at indexPath: IndexPath, with todo: ToDo) {
+        updateLocalTodoProperties(with: todo)
+        DispatchQueue.main.async {
+            self.view?.reloadCell(with: indexPath)
+        }
+    }
 }
 
 // MARK: - Private methods
@@ -163,5 +168,13 @@ extension ToDoListPresenter {
     private func viewReload() {
         view?.reloadTableView()
         view?.updateFooter()
+    }
+    
+    private func updateLocalTodoProperties(with todo: ToDo) {
+        if let index = todos.firstIndex(where: { $0.id == todo.id }) {
+            todos[index].title = todo.title
+            todos[index].date = todo.date
+            todos[index].description = todo.description
+        }
     }
 }
