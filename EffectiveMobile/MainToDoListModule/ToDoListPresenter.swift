@@ -40,6 +40,7 @@ extension ToDoListPresenter: ToDoListPresenterProtocol {
         
         guard !query.isEmpty else {
             todos = todosBeforeFiltering
+            viewReload()
             return
         }
             

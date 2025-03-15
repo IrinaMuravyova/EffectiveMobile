@@ -86,7 +86,7 @@ class Repository: RepositoryProtocol {
     }
     
     func updateTodo(for todo: ToDo, withTitle: String, date: String, description: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        var updatedTodo = todo
+        let updatedTodo = todo
         updatedTodo.title = withTitle
         updatedTodo.date = date
         updatedTodo.description = description
